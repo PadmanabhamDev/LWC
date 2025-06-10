@@ -1,0 +1,10 @@
+<template>
+    <lightning-card if:true={isValid} title={title} class="slds-p-around_medium">
+        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+            <span class="slds-assistive-text">error</span>
+            <h2>{h2Data}
+                <a href="javascript:void(0);">{number}</a>
+            </h2>
+        </div>
+    </lightning-card>
+</template>

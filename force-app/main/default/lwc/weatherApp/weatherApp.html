@@ -1,0 +1,21 @@
+<template>
+    <div class="app flex-center">
+        <div class="app-card">
+            <header class="flex-center">
+                <h1>Weather App</h1>
+            </header>
+            <section>
+                <template if:true={isLoading}>
+                    <h3 lwc:if={noError} class="noError">Fetching Details</h3>
+                    <h3 lwc:else class="errorFound">City Not Found</h3>
+                </template>
+               
+                <input type="text" placeholder="Enter City Name" value={cityName} required spellcheck="false" onchange={searchHandler}>
+                <button type="submit" class="slds-m-top-_large" onclick={submitHandler}>Search</button>
+            </section>
+        </div>
+    </div>
+    <div class="history">
+        {data}
+    </div>
+</template>

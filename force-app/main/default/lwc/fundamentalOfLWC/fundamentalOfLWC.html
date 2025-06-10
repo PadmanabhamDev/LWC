@@ -1,0 +1,19 @@
+<template>
+    <lightning-card icon-name="standard:account" variant="base">
+      <div slot="title">
+         Fundamental of LWC
+      </div>
+
+      <div>
+        <p>One Way Data Binding</p>
+        <p>Full Name - {name}</p>
+      </div>
+
+       <div>
+        <p>Two Way Data Binding</p>
+       <lightning-input ype="text" label="Enter your Full Name " onchange={handleChange}></lightning-input>
+       <p>{nameChange}</p>
+      </div>
+
+    </lightning-card>
+</template>

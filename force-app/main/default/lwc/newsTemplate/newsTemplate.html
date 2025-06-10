@@ -1,0 +1,61 @@
+<template>
+    <div class="body">
+        <h1 class="news">NEWS</h1>
+        <div class="slds-context-bar">
+            <nav class="slds-context-bar__secondary" role="navigation">
+                <ul class="slds-grid">
+                    <li class="slds-context-bar__item slds-is-active">
+                        <a href="#" class="slds-context-bar__label-action" title="Home">
+                            <span class="slds-assistive-text">Current Page:</span>
+                            <span class="slds-truncate" title="Home">Home</span>
+                        </a>
+                    </li>
+                    <li class="slds-context-bar__item">
+                        <a href="#" class="slds-context-bar__label-action" title="Menu Item">
+                            <span class="slds-truncate" title="Menu Item">Test 1</span>
+                        </a>
+                    </li>
+                    <li class="slds-context-bar__item">
+                        <a href="#" class="slds-context-bar__label-action" title="Menu Item">
+                            <span class="slds-truncate" title="Menu Item">Test 2</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <nav role="navigation" aria-label="Breadcrumbs">
+            <ol class="slds-breadcrumb slds-list_horizontal slds-wrap navtext">
+                <li class="slds-breadcrumb__item">
+                    <a href="#">News</a>
+                </li>
+                <li class="slds-breadcrumb__item">
+                    <a href="#">Top HeadLine</a>
+                </li>
+                <li class="slds-breadcrumb__item">
+                    <a href="#">USA</a>
+                </li>
+            </ol>
+        </nav>
+        <div class="slds-grid slds-wrap newsPadding">
+                <template for:each={articles} for:item="item">
+                    <div key={item.source.id}
+                        class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-p-around_small">
+                        <div class="slds-card">
+                            <!-- Fixed-size image container -->
+                            <div style="width: 100%; height: 200px; overflow: hidden;">
+                    
+
+                                <img src={item.urlToImage} alt={item.title} />
+                            </div>
+                            <div class="slds-p-around_small">
+                                <p><strong>{item.title}</strong></p>
+                                <p>{item.description}</p>
+                                <p class="slds-text-color_destructive">{item.publishedAt}</p>
+                                <a href={item.url} target="_blank">Read more</a>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+    </div>
+</template>

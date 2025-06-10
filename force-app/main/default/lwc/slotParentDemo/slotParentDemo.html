@@ -1,0 +1,25 @@
+<template>
+    <lightning-card title="Slot Demo">
+        <div class="slds-p-around_medium">
+            <c-slot-child-demo>
+                <p>Hello</p>
+                <p class="slds-text-color_success" slot="first">My Name is Padmanabham</p>
+                <!-- above we are passing the html markup to child component when it's rendering in child component it will search for slot that is available or not is slot is available then it will replace the slot tag with  -->
+                <p class="slds-text-color_error" slot="second"> 3 years 4 months</p>
+                <p slot="footer"></p>
+            </c-slot-child-demo>
+        </div>
+    </lightning-card>
+
+    <lightning-card title="Slot Demo">
+        <div class="slds-p-around_medium">
+            <c-slot-child-demo>
+                <p>Hello</p>
+                <p class="slds-text-color_success" slot="first">My Name is Padmanabham</p>
+                <!-- above we are passing the html markup to child component when it's rendering in child component it will search for slot that is available or not is slot is available then it will replace the slot tag with  -->
+                <p class="slds-text-color_error" slot="second"> 3 years 4 months</p>
+                <p slot="footer">Test</p>
+            </c-slot-child-demo>
+        </div>
+    </lightning-card>
+</template>

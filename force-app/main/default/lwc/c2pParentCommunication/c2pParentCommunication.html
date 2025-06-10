@@ -1,0 +1,12 @@
+<template>
+    <lightning-card title="Child to parent Communication">
+        <div class="slds-p-around_medium">
+            <lightning-button variant="success" label="Open Modal" title="Open Modal" icon-name="utility:save"
+                icon-position="left" class="slds-m-left_x-medium" onclick={handleModal}></lightning-button>
+                <h1>{msg} {num}</h1>
+            <template if:true={openModal}>
+                <c-c2p-modal-component onclose={handleClose}></c-c2p-modal-component>
+            </template>
+        </div>
+    </lightning-card>
+</template>

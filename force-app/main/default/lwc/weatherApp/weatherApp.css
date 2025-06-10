@@ -1,0 +1,74 @@
+.app{
+    background-color: #161667;
+    height: 50vh;
+}
+h1{
+    font-weight: bold;
+    font-size: 2em;
+}
+
+
+.flex-center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.app-card{
+    background: white;
+    border-radius: 8px;
+    min-width: 25%;
+    max-width: 35%;
+    padding: 3%;
+}
+
+header{
+    font-size: larger;
+    color: black;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #ccc;
+}
+
+input{
+    text-align: center;
+    padding: 5px;
+    margin-top: 5%;
+    width: 100%;
+    font-size: 30px;
+    border: 2px solid #161667;
+    border-radius: 27px;
+    margin-bottom: 5%;
+}
+button{
+    width: 100%;
+    margin-top: 15px;
+    background: #078000;
+    border: white;
+    border-radius: 25px;
+    padding: 9px;
+    font-size: 20px;
+}
+.history{
+    background-color: white;
+    height: 40vh;
+    padding: 2%;
+    margin: 2%;
+    border-radius: 24px;
+}
+
+.noError{
+    font-size: 20px;
+    background-color: #b5ffb5;
+    padding: 5px;
+    padding-left: 15px;
+    border-radius: 9px;
+    margin-top: 8px;
+}
+
+.errorFound{
+    font-size: 20px;
+    background-color: #ff8f8f;
+    padding: 5px;
+    padding-left: 15px;
+    border-radius: 9px;
+    margin-top: 8px;
+}

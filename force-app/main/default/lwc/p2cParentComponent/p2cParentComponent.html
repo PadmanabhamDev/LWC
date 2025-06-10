@@ -1,0 +1,30 @@
+<template>
+    <c-p2c-alert-component title="Parent to child communication"
+        h2-data="Parent to Child Communication with primitive data type" number=20 is-valid=true>
+    </c-p2c-alert-component>
+
+    <c-p2c-carousel-component carousel-data={carouselData}></c-p2c-carousel-component>
+
+    <lightning-card title="Parent to child communication on action at parent component">
+        <div class="slds-m-around_medium slds-p-around_medium">
+            <lightning-input 
+              type="number"
+              label="Enter Number"
+              value={progreesValue}
+              onkeyup={handleChange}
+            ></lightning-input>
+           <c-p2c-progress-bar progrees-value={progreesValue}></c-p2c-progress-bar>
+        </div>
+    </lightning-card>
+
+    <lightning-card title="Calling Child method from parent">
+        <lightning-button 
+          variant="base"
+          label="Button Label" 
+          onclick={resetValue} 
+        ></lightning-button>
+        <div class="slds-p-around_medium">
+            <c-p2c-slider lwc:ref="reset" val={value} ></c-p2c-slider>
+        </div>
+    </lightning-card>
+</template>

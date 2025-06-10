@@ -1,0 +1,7 @@
+<template>
+    <h1>Hey  I'm an heading</h1>
+    <template for:each={users} for:item="user">
+        <p class="name" key={user}>{user}</p>
+    </template>
+    <button onclick={handler}>fetch Details</button>
+</template>
