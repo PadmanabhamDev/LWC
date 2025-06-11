@@ -19,8 +19,8 @@
             <slot></slot>
         </div>
         <!-- footer -->
-        <footer class="slds-card__footer">
-            <slot name="footer"></slot>
+        <footer class="slds-card__footer slds-hide">
+            <slot name="footer" onslotchange={handlefooterChange}></slot>
         </footer>
     </article>
 </template>
