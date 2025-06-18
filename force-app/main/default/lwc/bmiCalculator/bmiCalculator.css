@@ -1,0 +1,54 @@
+.dummy{
+    background-color: black;
+}
+/* it will point out whole component level */
+:host{
+    --dark-blue:#0b0d21;
+    --light-white:#fafafa;
+    --light-blue:#4f7df9;
+    --size-16:16px;
+    --size-14:14px;
+    --size-12:12px;
+}
+.app{
+    min-height: 100vh;
+    background-image: url(/resource/bmiPic);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.box{
+    max-width: 420px;
+    text-align: center;
+    margin: auto;
+    background-color: var(--dark-blue);
+    color: var(--light-white);
+    padding: var(--size-16);
+    border-radius: 40px;
+}
+
+h1{
+    font-size: 36px;
+    padding: 20px 0;
+    font-weight: bold;
+}
+
+.info-wrapper{
+    background: #1d1e33;
+    padding: var(--size-16);
+    border-bottom-left-radius: 38px;
+    border-bottom-right-radius: 38px;
+    font-size: 14px ;
+    text-align: center;
+}
+h2{
+    font-size: 26px;
+    color: #e91e63;
+}
+lightning-input{
+    color: var(--dark-blue);
+}
+.result{
+    font-size: 24px;
+    font-weight: bold;
+    padding: 12px;
+}
