@@ -1,0 +1,34 @@
+<template>
+    <lightning-card title="Filtering Demo">
+        <div class="slds-p-around_medium">
+            <div class="slds-grid slds-gutters slds-wrap">
+                <div class="slds-col slds-size_2-of-12 slds-p-bottom_medium">
+                    <lightning-combobox name="filterBy" label="Filter By" value=Name placeholder="Select filter"
+                        options={filterOptions} onchange={handleFilterChange}></lightning-combobox>
+                </div>
+                <div class="slds-col slds-size_3-of-12 slds-p-bottom_medium">
+                    <lightning-input type="text" label="Type Here To Search" onkeyup={handleSearch}></lightning-input>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <template for:each={headings} for:item="heading">
+                            <th key={heading}>{heading}</th>
+                        </template>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={filteredData} for:item="contact">
+                        <tr key={contact.Id}>
+                            <td>{contact.Id}</td>
+                            <td>{contact.Name}</td>
+                            <td>{contact.Email}</td>
+                            <td>{contact.Title}</td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+    </lightning-card>
+</template>
