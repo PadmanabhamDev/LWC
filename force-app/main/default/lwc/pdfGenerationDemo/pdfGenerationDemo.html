@@ -1,0 +1,75 @@
+<template>
+    <div class="container">
+        <div>
+            <h1>Invoice Details</h1>
+            <p>Invoice Number : {invoiceData.invoiceNumber}</p>
+            <p>Date {invoiceData.date}</p>
+            <p>Due Date : {invoiceData.dueDate}</p>
+            <p>Bill To</p>
+            <p>Name : {invoiceData.billTo.name}</p>
+            <p>company : {invoiceData.billTo.company}</p>
+            <p>address : {invoiceData.billTo.address}</p>
+            <p>city : {invoiceData.billTo.city}</p>
+            <p>state : {invoiceData.billTo.state}</p>
+            <p>zip : {invoiceData.billTo.zip}</p>
+            <p>country : {invoiceData.billTo.country}</p>
+            <p>email : {invoiceData.billTo.email}</p>
+            <template for:each={invoiceData.items} for:item="item">
+                <div key={item.description}>
+                    <p>Description : {item.description}</p>
+                    <p>Quantity : {item.quantity}</p>
+                    <p>Unit Price : {item.unitPrice}</p>
+                    <p>Total : {item.total}</p>
+                </div>
+            </template>
+            <p>Subtotal : {invoiceData.subtotal}</p>
+            <p>Tax Rate : {invoiceData.taxRate}</p>
+            <p>Tax Amount : {invoiceData.taxAmount}</p>
+            <p>TotalAmount : {invoiceData.totalAmount}</p>
+            <p>Payment Status : {invoiceData.paymentStatus}</p>
+            <p>Notes : {invoiceData.notes}</p>
+        </div>
+    </div>
+</template>
+
+<!-- invoiceData = {
+        invoiceNumber: 'INV-1001',
+        date: '2025-06-15',
+        dueDate: '2025-07-01',
+        billTo: {
+            name: 'Jane Doe',
+            company: 'Doe Enterprises',
+            address: '123 Business Ave, Suite 400',
+            city: 'New York',
+            state: 'NY',
+            zip: '10001',
+            country: 'USA',
+            email: 'jane.doe@example.com',
+        },
+        items: [
+            {
+                description: 'Website Design',
+                quantity: 1,
+                unitPrice: 1500.00,
+                total: 1500.00
+            },
+            {
+                description: 'Hosting (1 year)',
+                quantity: 1,
+                unitPrice: 120.00,
+                total: 120.00
+            },
+            {
+                description: 'Domain Registration',
+                quantity: 1,
+                unitPrice: 15.00,
+                total: 15.00
+            }
+        ],
+        subtotal: 1635.00,
+        taxRate: 0.08,
+        taxAmount: 130.80,
+        totalAmount: 1765.80,
+        paymentStatus: 'Unpaid',
+        notes: 'Please make payment by the due date. Late payments may incur a fee.',
+    }; -->

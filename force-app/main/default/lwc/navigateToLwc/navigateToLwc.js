@@ -5,9 +5,6 @@ export default class NavigateToLwc extends NavigationMixin(LightningElement) {
     navigateToLwc() {
         var defination = {
             componentDef: 'c:quizApp',
-            attributes: {
-                recordId: '1234567890'// after use @api to get the value in webPage
-            }
         }
         this[NavigationMixin.Navigate]({
             type: 'standard__webPage',

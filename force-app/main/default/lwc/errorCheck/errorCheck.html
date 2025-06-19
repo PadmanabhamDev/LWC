@@ -1,0 +1,12 @@
+<template>
+    <lightning-card title="Record Table with Row-Level Errors">
+        <lightning-button label="Save Records" onclick={handleSave} class="slds-m-around_medium"></lightning-button>
+        
+        <lightning-datatable
+            key-field="id"
+            data={records}
+            columns={columns}
+            errors={tableErrors}>
+        </lightning-datatable>
+    </lightning-card>
+</template>
