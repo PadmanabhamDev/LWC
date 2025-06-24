@@ -1,9 +1,8 @@
 <template>
-    <div style="height:250px">
-        <lightning-datatable
-          key-field="empId"
-          data={empData}
-          columns={empColumn}
-        ></lightning-datatable>
-    </div>
+  <lightning-card title="Data Table">
+    <lightning-datatable key-field="empId" data={empData} columns={empColumn} hide-checkbox-column
+      show-row-number-column row-number-offset onrowaction={handleRowAction} onsort={handleSort} sorted-by={sortedBy}
+      sorted-direction={sortedDirection} default-sort-direction={defaultSortDirection}
+      onheaderaction={handleHeaderAction}></lightning-datatable>
+  </lightning-card>
 </template>
