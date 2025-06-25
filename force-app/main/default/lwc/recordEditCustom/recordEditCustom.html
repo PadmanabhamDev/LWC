@@ -1,0 +1,17 @@
+<template>
+    <lightning-card title="Custom Record Edit form">
+        <lightning-record-edit-form density="compact" object-api-name={objectName} onsubmit={handleSubmit}>
+            <lightning-input type="text" label="Name" value={inputValue}
+                class="slds-p-around_medium slds-m-around_medium" onkeyup={handleChange}>
+            </lightning-input>
+            <lightning-input type="text" label="Phone" value={phoneValue}
+                class="slds-p-around_medium slds-m-around_medium" onkeyup={handleChange}>
+            </lightning-input>
+            <lightning-input type="text" label="Employees" value={employeesValue}
+                class="slds-p-around_medium slds-m-around_medium" onkeyup={handleChange}>
+            </lightning-input>
+            <lightning-button type="submit" variant="brand" label="Create Account"
+                onclick={handleClick}></lightning-button>
+        </lightning-record-edit-form>
+    </lightning-card>
+</template>
