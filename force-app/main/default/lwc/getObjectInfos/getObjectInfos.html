@@ -1,0 +1,14 @@
+<template>
+    <lightning-card title="Multiple Object Infos">
+        <template if:true={objectInfosData}>
+            <div class="slds-p-around_medium">
+                <template for:each={objectInfosData.results} for:item="obj">
+                    <div key={obj.result.apiName}>
+                        <div>Object Api Name - {obj.result.apiName}</div>
+                        <div> {obj.result.defaultRecordTypeId}</div>
+                    </div>
+                </template>
+            </div>
+        </template>
+    </lightning-card>
+</template>
