@@ -1,0 +1,13 @@
+<template>
+    <lightning-card title="PickListValue Using Id">
+        <template if:true={pickListData}>
+            <lightning-combobox name="Industry PickList" label="Industry" value={pickListData.value}
+                placeholder="Selcct Value" options={pickListData} onchange={handleChange}></lightning-combobox>
+        </template>
+
+        <template if:true={pickListData1}>
+            <lightning-combobox name="Type" label="Type" value={pickListData1.value} placeholder="Select Value"
+                options={pickListData1} onchange={handleChange}></lightning-combobox>
+        </template>
+    </lightning-card>
+</template>
