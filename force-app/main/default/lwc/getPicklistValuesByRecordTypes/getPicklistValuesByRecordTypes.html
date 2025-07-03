@@ -1,0 +1,16 @@
+<template>
+    <lightning-card title="getPicklistValuesByRecordType ">
+        <template if:true={accountSource}>
+            <lightning-combobox name="Account Source" label="Account Source" value={accountSource.value}
+                placeholder="Select Account Source" options={accountSource}
+                onchange={handleChange}></lightning-combobox>
+        </template>
+        <strong if:true={selectedValue1}>Country Code :{selectedValue1}</strong>
+        <template if:true={billingCountryCode}>
+            <lightning-combobox name="Billing Country Code" label="Billing Country Code"
+                value={billingCountryCode.value} placeholder="Select Billing Country Code" options={billingCountryCode}
+                onchange={handleChange}></lightning-combobox>
+        </template>
+        <strong if:true={selectedValue2}>Country Code :{selectedValue2}</strong>
+    </lightning-card>
+</template>
