@@ -1,0 +1,364 @@
+<template>
+    <div class="blog-post-editor">
+        <!-- Page Header -->
+        <div class="slds-page-header">
+            <div class="slds-grid slds-grid_align-spread">
+                <div class="slds-col">
+                    <h1 class="slds-text-heading_large">
+                        {pageTitle}
+                    </h1>
+                    <p class="slds-text-body_regular slds-m-top_x-small">
+                        Create and manage your blog content
+                    </p>
+                </div>
+                <div class="slds-col slds-no-flex">
+                    <lightning-button-group>
+                        <lightning-button
+                            label="Back to Posts"
+                            icon-name="utility:back"
+                            onclick={handleBackToPosts}>
+                        </lightning-button>
+                        <lightning-button
+                            label="Preview"
+                            icon-name="utility:preview"
+                            onclick={handlePreview}
+                            disabled={isPreviewDisabled}>
+                        </lightning-button>
+                    </lightning-button-group>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <template if:true={isLoading}>
+            <div class="slds-align_absolute-center slds-m-vertical_large">
+                <lightning-spinner alternative-text="Loading editor..."></lightning-spinner>
+            </div>
+        </template>
+
+        <!-- Error Message -->
+        <template if:true={error}>
+            <div class="slds-m-vertical_medium">
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                    <span class="slds-assistive-text">Error</span>
+                    <h2>
+                        <lightning-icon icon-name="utility:error" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                        {error}
+                    </h2>
+                </div>
+            </div>
+        </template>
+
+        <!-- Editor Form -->
+        <template if:false={isLoading}>
+            <form class="editor-form">
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <!-- Main Content Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_2-of-3">
+                        <!-- Post Title -->
+                        <div class="slds-form-element slds-m-bottom_medium">
+                            <label class="slds-form-element__label slds-text-heading_small" for="post-title">
+                                <abbr class="slds-required" title="required">* </abbr>
+                                Post Title
+                            </label>
+                            <div class="slds-form-element__control">
+                                <lightning-input
+                                    id="post-title"
+                                    type="text"
+                                    value={blogPost.Name}
+                                    onchange={handleTitleChange}
+                                    placeholder="Enter an engaging title for your blog post"
+                                    required>
+                                </lightning-input>
+                            </div>
+                        </div>
+
+                        <!-- URL Slug -->
+                        <div class="slds-form-element slds-m-bottom_medium">
+                            <label class="slds-form-element__label" for="url-slug">
+                                URL Slug
+                            </label>
+                            <div class="slds-form-element__control">
+                                <lightning-input
+                                    id="url-slug"
+                                    type="text"
+                                    value={blogPost.URL_Slug__c}
+                                    onchange={handleSlugChange}
+                                    placeholder="url-friendly-slug">
+                                </lightning-input>
+                                <div class="slds-form-element__help">
+                                    Leave blank to auto-generate from title
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Post Excerpt -->
+                        <div class="slds-form-element slds-m-bottom_medium">
+                            <label class="slds-form-element__label" for="post-excerpt">
+                                Excerpt
+                            </label>
+                            <div class="slds-form-element__control">
+                                <lightning-textarea
+                                    id="post-excerpt"
+                                    value={blogPost.Excerpt__c}
+                                    onchange={handleExcerptChange}
+                                    placeholder="Write a brief summary of your post (used in post previews and SEO)"
+                                    max-length="500">
+                                </lightning-textarea>
+                            </div>
+                        </div>
+
+                        <!-- Post Content -->
+                        <div class="slds-form-element slds-m-bottom_medium">
+                            <label class="slds-form-element__label slds-text-heading_small" for="post-content">
+                                <abbr class="slds-required" title="required">* </abbr>
+                                Content
+                            </label>
+                            <div class="slds-form-element__control">
+                                <lightning-input-rich-text
+                                    id="post-content"
+                                    value={blogPost.Content__c}
+                                    onchange={handleContentChange}
+                                    placeholder="Write your blog post content here..."
+                                    formats="font,size,bold,italic,underline,strike,list,indent,align,link,image,clean,table,header,color"
+                                    required>
+                                </lightning-input-rich-text>
+                            </div>
+                        </div>
+
+                        <!-- SEO Section -->
+                        <div class="seo-section slds-m-top_large">
+                            <h3 class="slds-text-heading_small slds-m-bottom_medium">
+                                <lightning-icon icon-name="utility:search" size="small" class="slds-m-right_x-small"></lightning-icon>
+                                SEO Settings
+                            </h3>
+                            
+                            <!-- SEO Title -->
+                            <div class="slds-form-element slds-m-bottom_medium">
+                                <label class="slds-form-element__label" for="seo-title">
+                                    SEO Title
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <lightning-input
+                                        id="seo-title"
+                                        type="text"
+                                        value={blogPost.SEO_Title__c}
+                                        onchange={handleSeoTitleChange}
+                                        placeholder="Optimized title for search engines"
+                                        max-length="70">
+                                    </lightning-input>
+                                    <div class="slds-form-element__help">
+                                        {seoTitleLength}/70 characters
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SEO Description -->
+                            <div class="slds-form-element slds-m-bottom_medium">
+                                <label class="slds-form-element__label" for="seo-description">
+                                    SEO Description
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <lightning-textarea
+                                        id="seo-description"
+                                        value={blogPost.SEO_Description__c}
+                                        onchange={handleSeoDescriptionChange}
+                                        placeholder="Meta description for search results"
+                                        max-length="160">
+                                    </lightning-textarea>
+                                    <div class="slds-form-element__help">
+                                        {seoDescriptionLength}/160 characters
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar Column -->
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-3">
+                        <!-- Publish Settings -->
+                        <div class="slds-box slds-m-bottom_medium">
+                            <h3 class="slds-text-heading_small slds-m-bottom_medium">
+                                <lightning-icon icon-name="utility:settings" size="small" class="slds-m-right_x-small"></lightning-icon>
+                                Publish Settings
+                            </h3>
+
+                            <!-- Status -->
+                            <div class="slds-form-element slds-m-bottom_medium">
+                                <label class="slds-form-element__label" for="post-status">
+                                    Status
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <lightning-combobox
+                                        id="post-status"
+                                        value={blogPost.Status__c}
+                                        options={statusOptions}
+                                        onchange={handleStatusChange}>
+                                    </lightning-combobox>
+                                </div>
+                            </div>
+
+                            <!-- Published Date -->
+                            <template if:true={showPublishedDate}>
+                                <div class="slds-form-element slds-m-bottom_medium">
+                                    <label class="slds-form-element__label" for="published-date">
+                                        Published Date
+                                    </label>
+                                    <div class="slds-form-element__control">
+                                        <lightning-input
+                                            id="published-date"
+                                            type="datetime-local"
+                                            value={publishedDateValue}
+                                            onchange={handlePublishedDateChange}>
+                                        </lightning-input>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <!-- Author -->
+                            <div class="slds-form-element slds-m-bottom_medium">
+                                <label class="slds-form-element__label" for="post-author">
+                                    Author
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <lightning-input
+                                        id="post-author"
+                                        type="text"
+                                        value={authorName}
+                                        readonly>
+                                    </lightning-input>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="action-buttons slds-m-top_medium">
+                                <lightning-button-group>
+                                    <lightning-button
+                                        variant="brand"
+                                        label={saveButtonLabel}
+                                        onclick={handleSave}
+                                        disabled={isSaveDisabled}>
+                                    </lightning-button>
+                                    <template if:true={showDeleteButton}>
+                                        <lightning-button
+                                            variant="destructive"
+                                            label="Delete"
+                                            onclick={handleDelete}>
+                                        </lightning-button>
+                                    </template>
+                                </lightning-button-group>
+                            </div>
+                        </div>
+
+                        <!-- Category and Tags -->
+                        <div class="slds-box slds-m-bottom_medium">
+                            <h3 class="slds-text-heading_small slds-m-bottom_medium">
+                                <lightning-icon icon-name="utility:topic" size="small" class="slds-m-right_x-small"></lightning-icon>
+                                Organization
+                            </h3>
+
+                            <!-- Category -->
+                            <div class="slds-form-element slds-m-bottom_medium">
+                                <label class="slds-form-element__label" for="post-category">
+                                    Category
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <lightning-combobox
+                                        id="post-category"
+                                        value={blogPost.Category__c}
+                                        options={categoryOptions}
+                                        onchange={handleCategoryChange}
+                                        placeholder="Select a category">
+                                    </lightning-combobox>
+                                </div>
+                            </div>
+
+                            <!-- Tags -->
+                            <div class="slds-form-element slds-m-bottom_medium">
+                                <label class="slds-form-element__label" for="post-tags">
+                                    Tags
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <lightning-input
+                                        id="post-tags"
+                                        type="text"
+                                        value={blogPost.Tags__c}
+                                        onchange={handleTagsChange}
+                                        placeholder="Enter tags separated by commas">
+                                    </lightning-input>
+                                    <div class="slds-form-element__help">
+                                        Separate multiple tags with commas
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Featured Image -->
+                        <div class="slds-box slds-m-bottom_medium">
+                            <h3 class="slds-text-heading_small slds-m-bottom_medium">
+                                <lightning-icon icon-name="utility:image" size="small" class="slds-m-right_x-small"></lightning-icon>
+                                Featured Image
+                            </h3>
+
+                            <!-- Image URL -->
+                            <div class="slds-form-element slds-m-bottom_medium">
+                                <label class="slds-form-element__label" for="featured-image">
+                                    Image URL
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <lightning-input
+                                        id="featured-image"
+                                        type="url"
+                                        value={blogPost.Featured_Image_URL__c}
+                                        onchange={handleFeaturedImageChange}
+                                        placeholder="https://example.com/image.jpg">
+                                    </lightning-input>
+                                </div>
+                            </div>
+
+                            <!-- Image Preview -->
+                            <template if:true={blogPost.Featured_Image_URL__c}>
+                                <div class="image-preview">
+                                    <img 
+                                        src={blogPost.Featured_Image_URL__c} 
+                                        alt="Featured image preview"
+                                        class="preview-image"
+                                        onerror={handleImageError}>
+                                </div>
+                            </template>
+                        </div>
+
+                        <!-- Post Statistics (for existing posts) -->
+                        <template if:true={showStatistics}>
+                            <div class="slds-box">
+                                <h3 class="slds-text-heading_small slds-m-bottom_medium">
+                                    <lightning-icon icon-name="utility:chart" size="small" class="slds-m-right_x-small"></lightning-icon>
+                                    Statistics
+                                </h3>
+                                
+                                <div class="stat-item slds-m-bottom_small">
+                                    <span class="stat-label">Views:</span>
+                                    <span class="stat-value">{blogPost.View_Count__c}</span>
+                                </div>
+                                
+                                <div class="stat-item slds-m-bottom_small">
+                                    <span class="stat-label">Created:</span>
+                                    <span class="stat-value">
+                                        <lightning-formatted-date-time value={blogPost.CreatedDate}></lightning-formatted-date-time>
+                                    </span>
+                                </div>
+                                
+                                <div class="stat-item">
+                                    <span class="stat-label">Last Modified:</span>
+                                    <span class="stat-value">
+                                        <lightning-formatted-date-time value={blogPost.LastModifiedDate}></lightning-formatted-date-time>
+                                    </span>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </form>
+        </template>
+    </div>
+</template>

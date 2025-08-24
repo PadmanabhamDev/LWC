@@ -1,0 +1,228 @@
+<template>
+    <div class="blog-post-detail">
+        <!-- Loading Spinner -->
+        <template if:true={isLoading}>
+            <div class="slds-align_absolute-center slds-m-vertical_xx-large">
+                <lightning-spinner alternative-text="Loading blog post..."></lightning-spinner>
+            </div>
+        </template>
+
+        <!-- Error Message -->
+        <template if:true={error}>
+            <div class="slds-m-vertical_medium">
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                    <span class="slds-assistive-text">Error</span>
+                    <h2>
+                        <lightning-icon icon-name="utility:error" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                        {error}
+                    </h2>
+                </div>
+            </div>
+        </template>
+
+        <!-- Blog Post Content -->
+        <template if:true={blogPost}>
+            <article class="blog-post-content">
+                <!-- Navigation Breadcrumb -->
+                <nav class="slds-breadcrumb" role="navigation" aria-label="Breadcrumb">
+                    <ol class="slds-breadcrumb__nav">
+                        <li class="slds-breadcrumb__item">
+                            <a href="javascript:void(0)" onclick={handleBackToBlog}>Blog</a>
+                        </li>
+                        <li class="slds-breadcrumb__item" aria-current="page">
+                            <span>{blogPost.Name}</span>
+                        </li>
+                    </ol>
+                </nav>
+
+                <!-- Post Header -->
+                <header class="post-header slds-m-top_large">
+                    <!-- Category Badge -->
+                    <template if:true={blogPost.Category__r}>
+                        <div class="slds-m-bottom_medium">
+                            <span class="category-badge slds-badge" style={categoryStyle}>
+                                {blogPost.Category__r.Name}
+                            </span>
+                        </div>
+                    </template>
+
+                    <!-- Post Title -->
+                    <h1 class="post-title slds-text-heading_large">
+                        {blogPost.Name}
+                    </h1>
+
+                    <!-- Post Meta Information -->
+                    <div class="post-meta slds-grid slds-wrap slds-m-top_medium">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <div class="meta-item">
+                                <lightning-icon icon-name="utility:user" size="x-small" class="meta-icon"></lightning-icon>
+                                <span class="meta-text">By {blogPost.Author__r.Name}</span>
+                            </div>
+                            <div class="meta-item">
+                                <lightning-icon icon-name="utility:event" size="x-small" class="meta-icon"></lightning-icon>
+                                <span class="meta-text">
+                                    <lightning-formatted-date-time 
+                                        value={blogPost.Published_Date__c}
+                                        year="numeric"
+                                        month="long"
+                                        day="2-digit">
+                                    </lightning-formatted-date-time>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-text-align_right">
+                            <div class="meta-item">
+                                <lightning-icon icon-name="utility:preview" size="x-small" class="meta-icon"></lightning-icon>
+                                <span class="meta-text">{blogPost.View_Count__c} views</span>
+                            </div>
+                            <div class="meta-item">
+                                <lightning-button-icon
+                                    icon-name="utility:share"
+                                    variant="border-filled"
+                                    alternative-text="Share this post"
+                                    title="Share this post"
+                                    onclick={handleShare}>
+                                </lightning-button-icon>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Featured Image -->
+                    <template if:true={blogPost.Featured_Image_URL__c}>
+                        <div class="featured-image-container slds-m-top_large">
+                            <img 
+                                src={blogPost.Featured_Image_URL__c} 
+                                alt={blogPost.Name}
+                                class="featured-image">
+                        </div>
+                    </template>
+                </header>
+
+                <!-- Post Content -->
+                <div class="post-content slds-m-top_x-large">
+                    <div class="content-body slds-rich-text-editor__output">
+                        <lightning-formatted-rich-text value={blogPost.Content__c}></lightning-formatted-rich-text>
+                    </div>
+                </div>
+
+                <!-- Tags Section -->
+                <template if:true={tags}>
+                    <div class="tags-section slds-m-top_x-large">
+                        <h3 class="slds-text-heading_small slds-m-bottom_small">Tags</h3>
+                        <div class="tags-container">
+                            <template for:each={tags} for:item="tag">
+                                <lightning-button
+                                    key={tag}
+                                    variant="neutral"
+                                    label={tag}
+                                    size="small"
+                                    onclick={handleTagClick}
+                                    data-tag={tag}
+                                    class="tag-button">
+                                </lightning-button>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Social Share Section -->
+                <div class="social-share-section slds-m-top_x-large slds-p-top_large slds-border_top">
+                    <h3 class="slds-text-heading_small slds-m-bottom_medium">Share this post</h3>
+                    <div class="social-buttons slds-grid slds-gutters">
+                        <div class="slds-col">
+                            <lightning-button
+                                variant="brand"
+                                label="Share on Twitter"
+                                icon-name="utility:socialshare"
+                                onclick={handleTwitterShare}
+                                class="social-button">
+                            </lightning-button>
+                        </div>
+                        <div class="slds-col">
+                            <lightning-button
+                                variant="brand"
+                                label="Share on Facebook"
+                                icon-name="utility:socialshare"
+                                onclick={handleFacebookShare}
+                                class="social-button">
+                            </lightning-button>
+                        </div>
+                        <div class="slds-col">
+                            <lightning-button
+                                variant="brand"
+                                label="Share on LinkedIn"
+                                icon-name="utility:socialshare"
+                                onclick={handleLinkedInShare}
+                                class="social-button">
+                            </lightning-button>
+                        </div>
+                        <div class="slds-col">
+                            <lightning-button
+                                variant="neutral"
+                                label="Copy Link"
+                                icon-name="utility:copy"
+                                onclick={handleCopyLink}
+                                class="social-button">
+                            </lightning-button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Comments Section -->
+            <div class="comments-section slds-m-top_xx-large">
+                <c-blog-comments blog-post-id={blogPost.Id}></c-blog-comments>
+            </div>
+
+            <!-- Related Posts Section -->
+            <template if:true={showRelatedPosts}>
+                <div class="related-posts-section slds-m-top_xx-large">
+                    <h3 class="slds-text-heading_medium slds-m-bottom_large">Related Posts</h3>
+                    <c-blog-post-list
+                        page-title=""
+                        page-description=""
+                        show-create-button="false"
+                        page-size="3">
+                    </c-blog-post-list>
+                </div>
+            </template>
+        </template>
+
+        <!-- Back to Top Button -->
+        <template if:true={showBackToTop}>
+            <div class="back-to-top">
+                <lightning-button-icon
+                    icon-name="utility:up"
+                    variant="brand"
+                    alternative-text="Back to top"
+                    title="Back to top"
+                    onclick={handleBackToTop}
+                    size="large">
+                </lightning-button-icon>
+            </div>
+        </template>
+
+        <!-- Toast Messages -->
+        <template if:true={showToast}>
+            <div class="toast-container">
+                <div class={toastClass} role="alert">
+                    <span class="slds-assistive-text">{toastType}</span>
+                    <span class="slds-icon_container slds-m-right_small">
+                        <lightning-icon icon-name={toastIcon} size="small"></lightning-icon>
+                    </span>
+                    <div class="slds-notify__content">
+                        <h2 class="slds-text-heading_small">{toastMessage}</h2>
+                    </div>
+                    <div class="slds-notify__close">
+                        <lightning-button-icon
+                            icon-name="utility:close"
+                            variant="bare-inverse"
+                            alternative-text="Close"
+                            onclick={handleCloseToast}>
+                        </lightning-button-icon>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

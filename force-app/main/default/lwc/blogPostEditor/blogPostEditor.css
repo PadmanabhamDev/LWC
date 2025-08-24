@@ -1,0 +1,370 @@
+/* Main Container */
+.blog-post-editor {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+/* Page Header */
+.slds-page-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.slds-page-header h1 {
+    color: white;
+    font-weight: 700;
+}
+
+.slds-page-header p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Form Layout */
+.editor-form {
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+}
+
+/* Form Elements */
+.slds-form-element__label {
+    font-weight: 600;
+    color: #333;
+}
+
+.slds-form-element__help {
+    color: #666;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+}
+
+/* Required field indicator */
+.slds-required {
+    color: #d73648;
+}
+
+/* Rich Text Editor */
+lightning-input-rich-text {
+    min-height: 400px;
+}
+
+/* SEO Section */
+.seo-section {
+    border-top: 1px solid #e5e5e5;
+    padding-top: 2rem;
+    background-color: #f8f9fa;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    margin-top: 2rem;
+}
+
+.seo-section h3 {
+    color: #0176d3;
+    display: flex;
+    align-items: center;
+}
+
+/* Sidebar Boxes */
+.slds-box {
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.slds-box h3 {
+    color: #0176d3;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.action-buttons lightning-button {
+    flex: 1;
+    min-width: 120px;
+}
+
+/* Image Preview */
+.image-preview {
+    border: 1px solid #e5e5e5;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+.preview-image {
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Statistics */
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.stat-item:last-child {
+    border-bottom: none;
+}
+
+.stat-label {
+    font-weight: 500;
+    color: #666;
+}
+
+.stat-value {
+    font-weight: 600;
+    color: #333;
+}
+
+/* Character Count Indicators */
+.slds-form-element__help {
+    text-align: right;
+    font-family: monospace;
+}
+
+/* SEO Character Limits */
+.slds-form-element__help {
+    color: #666;
+}
+
+.slds-form-element:has(input[maxlength="70"]) .slds-form-element__help,
+.slds-form-element:has(textarea[maxlength="160"]) .slds-form-element__help {
+    font-weight: 500;
+}
+
+/* Input Focus States */
+lightning-input:focus-within,
+lightning-textarea:focus-within,
+lightning-combobox:focus-within,
+lightning-input-rich-text:focus-within {
+    outline: 2px solid #0176d3;
+    outline-offset: 2px;
+}
+
+/* Loading State */
+.slds-spinner_container {
+    position: relative;
+    min-height: 400px;
+}
+
+/* Error Message */
+.slds-notify_alert {
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .blog-post-editor {
+        padding: 0.5rem;
+    }
+    
+    .slds-page-header {
+        padding: 1.5rem;
+    }
+    
+    .editor-form {
+        padding: 1rem;
+    }
+    
+    .slds-box {
+        padding: 1rem;
+    }
+    
+    .seo-section {
+        padding: 1rem;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .action-buttons lightning-button {
+        min-width: auto;
+    }
+    
+    /* Stack form layout on mobile */
+    .slds-large-size_2-of-3,
+    .slds-large-size_1-of-3 {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .blog-post-editor {
+        padding: 0.25rem;
+    }
+    
+    .editor-form {
+        padding: 0.5rem;
+    }
+    
+    .slds-box {
+        padding: 0.75rem;
+    }
+    
+    .preview-image {
+        max-height: 150px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .slds-page-header,
+    .action-buttons,
+    lightning-button-group {
+        display: none;
+    }
+    
+    .blog-post-editor {
+        max-width: none;
+        padding: 0;
+    }
+    
+    .editor-form {
+        box-shadow: none;
+        border: none;
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .slds-box {
+        border: 2px solid #000;
+    }
+    
+    .slds-form-element__label {
+        color: #000;
+    }
+    
+    .stat-label,
+    .stat-value {
+        color: #000;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .editor-form {
+        background-color: #1a1a1a;
+        color: #fff;
+    }
+    
+    .slds-box {
+        background-color: #2a2a2a;
+        border-color: #444;
+        color: #fff;
+    }
+    
+    .seo-section {
+        background-color: #2a2a2a;
+    }
+    
+    .slds-form-element__label {
+        color: #fff;
+    }
+    
+    .stat-label {
+        color: #ccc;
+    }
+    
+    .stat-value {
+        color: #fff;
+    }
+    
+    .stat-item {
+        border-color: #444;
+    }
+}
+
+/* Animation for smooth transitions */
+.slds-box,
+.editor-form {
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.slds-box:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Auto-save indicator */
+.auto-save-indicator {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background: #04844b;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-size: 0.8rem;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.auto-save-indicator.show {
+    opacity: 1;
+}
+
+/* Rich text editor customization */
+.ql-toolbar {
+    border-top: 1px solid #e5e5e5;
+    border-left: 1px solid #e5e5e5;
+    border-right: 1px solid #e5e5e5;
+    background-color: #f8f9fa;
+}
+
+.ql-container {
+    border-bottom: 1px solid #e5e5e5;
+    border-left: 1px solid #e5e5e5;
+    border-right: 1px solid #e5e5e5;
+    min-height: 300px;
+}
+
+/* Form validation styling */
+.slds-has-error .slds-form-element__control {
+    border-color: #d73648;
+}
+
+.slds-has-error .slds-form-element__help {
+    color: #d73648;
+}
+
+/* Accessibility improvements */
+.slds-assistive-text {
+    position: absolute !important;
+    margin: -1px !important;
+    border: 0 !important;
+    padding: 0 !important;
+    width: 1px !important;
+    height: 1px !important;
+    overflow: hidden !important;
+    clip: rect(0 0 0 0) !important;
+    text-transform: none !important;
+    white-space: nowrap !important;
+}
+
+/* Focus management */
+.slds-form-element:focus-within .slds-form-element__label {
+    color: #0176d3;
+}

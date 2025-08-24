@@ -1,0 +1,527 @@
+/* Main Container */
+.blog-dashboard {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+/* Dashboard Header */
+.dashboard-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-header h1 {
+    color: white;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+}
+
+.dashboard-header p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+}
+
+/* Metrics Section */
+.metrics-section h2 {
+    color: #333;
+    font-weight: 600;
+    border-bottom: 2px solid #0176d3;
+    padding-bottom: 0.5rem;
+}
+
+.metrics-grid {
+    gap: 1rem;
+}
+
+/* Metric Cards */
+.metric-card {
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #0176d3, #4c6ef5);
+}
+
+.metric-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.metric-header {
+    margin-bottom: 1rem;
+}
+
+.metric-title {
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.metric-icon {
+    color: #0176d3;
+}
+
+.metric-icon.success {
+    color: #04844b;
+}
+
+.metric-icon.warning {
+    color: #ffb75d;
+}
+
+.metric-value {
+    font-weight: 700;
+    color: #333;
+    margin: 0.5rem 0;
+}
+
+.metric-change {
+    color: #666;
+}
+
+.change-indicator {
+    font-weight: 600;
+    color: #04844b;
+}
+
+.metric-action {
+    margin-top: 0.5rem;
+}
+
+/* Content Panels */
+.content-panel {
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    height: fit-content;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.panel-header h3 {
+    color: #333;
+    font-weight: 600;
+}
+
+/* Recent Posts */
+.recent-posts-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.post-item {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 0.75rem 0;
+    transition: background-color 0.2s ease;
+}
+
+.post-item:last-child {
+    border-bottom: none;
+}
+
+.post-item:hover {
+    background-color: #fafbfc;
+    border-radius: 0.25rem;
+    margin: 0 -0.5rem;
+    padding: 0.75rem 0.5rem;
+}
+
+.post-title {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.post-link {
+    color: #0176d3;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.post-link:hover {
+    color: #014486;
+    text-decoration: underline;
+}
+
+.post-meta {
+    margin-top: 0.5rem;
+}
+
+.post-meta .slds-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.75rem;
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.action-button {
+    width: 100%;
+    justify-content: flex-start;
+    text-align: left;
+}
+
+/* Categories List */
+.categories-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.category-item {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 0.5rem 0;
+}
+
+.category-item:last-child {
+    border-bottom: none;
+}
+
+.category-name {
+    font-weight: 500;
+    color: #333;
+}
+
+/* Tags Cloud */
+.tags-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tag-button {
+    font-size: 0.8rem;
+    border-radius: 1rem;
+    transition: all 0.2s ease;
+}
+
+.tag-button:hover {
+    transform: scale(1.05);
+    background-color: #0176d3;
+    color: white;
+}
+
+/* Activity Feed */
+.activity-section h2 {
+    color: #333;
+    font-weight: 600;
+    border-bottom: 2px solid #0176d3;
+    padding-bottom: 0.5rem;
+}
+
+.activity-feed {
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+}
+
+.activity-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.activity-item {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 0.75rem 0;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-icon {
+    background: linear-gradient(135deg, #0176d3 0%, #4c6ef5 100%);
+    color: white;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.activity-content p {
+    margin: 0.25rem 0;
+}
+
+/* Empty States */
+.empty-state {
+    padding: 2rem;
+    color: #666;
+}
+
+.empty-state h4 {
+    color: #333;
+}
+
+/* Loading States */
+.slds-spinner_container {
+    min-height: 400px;
+}
+
+/* Error Message */
+.slds-notify_alert {
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .blog-dashboard {
+        padding: 0.5rem;
+    }
+    
+    .dashboard-header {
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .dashboard-header h1 {
+        font-size: 1.5rem;
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+    
+    .metrics-grid .slds-col {
+        margin-bottom: 1rem;
+    }
+    
+    .metric-card {
+        padding: 1rem;
+    }
+    
+    .metric-value {
+        font-size: 1.5rem;
+    }
+    
+    .content-panel {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .post-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .quick-actions {
+        gap: 0.75rem;
+    }
+    
+    .tags-cloud {
+        gap: 0.25rem;
+    }
+    
+    .activity-item {
+        padding: 0.5rem 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-header {
+        padding: 1rem;
+    }
+    
+    .metric-card {
+        padding: 0.75rem;
+    }
+    
+    .content-panel {
+        padding: 0.75rem;
+    }
+    
+    .post-title {
+        font-size: 0.9rem;
+    }
+    
+    .post-meta {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .dashboard-header,
+    .quick-actions,
+    lightning-button-menu,
+    lightning-button {
+        display: none;
+    }
+    
+    .blog-dashboard {
+        max-width: none;
+        padding: 0;
+    }
+    
+    .metric-card,
+    .content-panel {
+        box-shadow: none;
+        border: 1px solid #000;
+        break-inside: avoid;
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .metric-card,
+    .content-panel {
+        border: 2px solid #000;
+    }
+    
+    .post-link {
+        color: #0000FF;
+    }
+    
+    .metric-value,
+    .post-title,
+    .category-name {
+        color: #000;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .blog-dashboard {
+        background-color: #1a1a1a;
+        color: #fff;
+    }
+    
+    .metric-card,
+    .content-panel,
+    .activity-feed {
+        background-color: #2a2a2a;
+        border-color: #444;
+        color: #fff;
+    }
+    
+    .metrics-section h2,
+    .activity-section h2 {
+        color: #fff;
+    }
+    
+    .panel-header h3,
+    .metric-title,
+    .post-title,
+    .category-name {
+        color: #fff;
+    }
+    
+    .post-item:hover {
+        background-color: #333;
+    }
+    
+    .activity-item,
+    .post-item,
+    .category-item {
+        border-color: #444;
+    }
+    
+    .empty-state {
+        color: #ccc;
+    }
+    
+    .empty-state h4 {
+        color: #fff;
+    }
+}
+
+/* Animation for metric cards */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.metric-card {
+    animation: slideInUp 0.6s ease-out;
+}
+
+.metric-card:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.metric-card:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.metric-card:nth-child(4) {
+    animation-delay: 0.3s;
+}
+
+/* Focus states for accessibility */
+.post-link:focus,
+.action-button:focus,
+.tag-button:focus {
+    outline: 2px solid #0176d3;
+    outline-offset: 2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .metric-card,
+    .tag-button,
+    .post-item,
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Custom scrollbars */
+.recent-posts-list::-webkit-scrollbar,
+.categories-list::-webkit-scrollbar,
+.activity-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.recent-posts-list::-webkit-scrollbar-track,
+.categories-list::-webkit-scrollbar-track,
+.activity-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.recent-posts-list::-webkit-scrollbar-thumb,
+.categories-list::-webkit-scrollbar-thumb,
+.activity-list::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+
+.recent-posts-list::-webkit-scrollbar-thumb:hover,
+.categories-list::-webkit-scrollbar-thumb:hover,
+.activity-list::-webkit-scrollbar-thumb:hover {
+    background: #0176d3;
+}

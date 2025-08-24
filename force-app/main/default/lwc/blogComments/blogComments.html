@@ -1,0 +1,295 @@
+<template>
+    <div class="blog-comments">
+        <!-- Comments Header -->
+        <div class="comments-header">
+            <h3 class="slds-text-heading_medium slds-m-bottom_medium">
+                <lightning-icon icon-name="utility:comments" size="small" class="slds-m-right_small"></lightning-icon>
+                Comments ({totalComments})
+            </h3>
+            
+            <!-- Comment Statistics (Admin Only) -->
+            <template if:true={showAdminStats}>
+                <div class="comment-stats slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                    <div class="slds-col slds-size_1-of-3">
+                        <div class="stat-card slds-text-align_center">
+                            <div class="stat-number slds-text-heading_small">{commentStats.approvedCount}</div>
+                            <div class="stat-label slds-text-body_small">Approved</div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <div class="stat-card slds-text-align_center">
+                            <div class="stat-number slds-text-heading_small">{commentStats.pendingCount}</div>
+                            <div class="stat-label slds-text-body_small">Pending</div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <div class="stat-card slds-text-align_center">
+                            <div class="stat-number slds-text-heading_small">{commentStats.rejectedCount}</div>
+                            <div class="stat-label slds-text-body_small">Rejected</div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <!-- Add Comment Form -->
+        <div class="add-comment-form slds-box slds-m-bottom_large">
+            <h4 class="slds-text-heading_small slds-m-bottom_medium">Leave a Comment</h4>
+            
+            <form onsubmit={handleSubmitComment}>
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <!-- Author Name -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="author-name">
+                                <abbr class="slds-required" title="required">* </abbr>
+                                Name
+                            </label>
+                            <div class="slds-form-element__control">
+                                <lightning-input
+                                    id="author-name"
+                                    type="text"
+                                    value={newComment.Author_Name__c}
+                                    onchange={handleAuthorNameChange}
+                                    placeholder="Your name"
+                                    required>
+                                </lightning-input>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Author Email -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="author-email">
+                                <abbr class="slds-required" title="required">* </abbr>
+                                Email
+                            </label>
+                            <div class="slds-form-element__control">
+                                <lightning-input
+                                    id="author-email"
+                                    type="email"
+                                    value={newComment.Author_Email__c}
+                                    onchange={handleAuthorEmailChange}
+                                    placeholder="your@email.com"
+                                    required>
+                                </lightning-input>
+                                <div class="slds-form-element__help">
+                                    Your email will not be published
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comment Text -->
+                <div class="slds-form-element slds-m-top_medium">
+                    <label class="slds-form-element__label" for="comment-text">
+                        <abbr class="slds-required" title="required">* </abbr>
+                        Comment
+                    </label>
+                    <div class="slds-form-element__control">
+                        <lightning-textarea
+                            id="comment-text"
+                            value={newComment.Comment_Text__c}
+                            onchange={handleCommentTextChange}
+                            placeholder="Share your thoughts..."
+                            max-length="2000"
+                            rows="4"
+                            required>
+                        </lightning-textarea>
+                        <div class="slds-form-element__help slds-text-align_right">
+                            {commentTextLength}/2000 characters
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comment Guidelines -->
+                <div class="comment-guidelines slds-m-top_medium">
+                    <div class="slds-notify slds-notify_toast slds-theme_info" role="status">
+                        <span class="slds-assistive-text">Info</span>
+                        <span class="slds-icon_container slds-m-right_small">
+                            <lightning-icon icon-name="utility:info" size="small"></lightning-icon>
+                        </span>
+                        <div class="slds-notify__content">
+                            <div class="slds-text-body_small">
+                                Comments are moderated and will appear after approval. Please be respectful and constructive.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="slds-m-top_medium">
+                    <lightning-button
+                        variant="brand"
+                        type="submit"
+                        label="Post Comment"
+                        icon-name="utility:send"
+                        disabled={isSubmitDisabled}
+                        class="submit-button">
+                    </lightning-button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Loading Spinner -->
+        <template if:true={isLoading}>
+            <div class="slds-align_absolute-center slds-m-vertical_large">
+                <lightning-spinner alternative-text="Loading comments..."></lightning-spinner>
+            </div>
+        </template>
+
+        <!-- Error Message -->
+        <template if:true={error}>
+            <div class="slds-m-vertical_medium">
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                    <span class="slds-assistive-text">Error</span>
+                    <h2>
+                        <lightning-icon icon-name="utility:error" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                        {error}
+                    </h2>
+                </div>
+            </div>
+        </template>
+
+        <!-- Comments List -->
+        <template if:true={hasComments}>
+            <div class="comments-list">
+                <h4 class="slds-text-heading_small slds-m-bottom_medium">
+                    {approvedCommentsCount} {commentsLabel}
+                </h4>
+                
+                <div class="comments-container">
+                    <template for:each={comments} for:item="comment">
+                        <article key={comment.Id} class="comment-item">
+                            <div class="comment-header slds-grid slds-grid_align-spread">
+                                <div class="slds-col">
+                                    <div class="comment-author">
+                                        <div class="author-avatar">
+                                            <lightning-icon icon-name="standard:user" size="small"></lightning-icon>
+                                        </div>
+                                        <div class="author-info">
+                                            <h5 class="author-name slds-text-body_regular">{comment.Author_Name__c}</h5>
+                                            <p class="comment-date slds-text-body_small slds-text-color_weak">
+                                                <lightning-formatted-date-time 
+                                                    value={comment.Posted_Date__c}
+                                                    year="numeric"
+                                                    month="short"
+                                                    day="numeric"
+                                                    hour="2-digit"
+                                                    minute="2-digit">
+                                                </lightning-formatted-date-time>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Admin Actions -->
+                                <template if:true={showAdminActions}>
+                                    <div class="slds-col slds-no-flex">
+                                        <lightning-button-menu
+                                            alternative-text="Comment actions"
+                                            icon-name="utility:down"
+                                            variant="border-filled"
+                                            menu-alignment="right">
+                                            <template if:true={comment.isPending}>
+                                                <lightning-menu-item 
+                                                    value="approve" 
+                                                    label="Approve" 
+                                                    onclick={handleModerateComment}
+                                                    data-comment-id={comment.Id}>
+                                                </lightning-menu-item>
+                                                <lightning-menu-item 
+                                                    value="reject" 
+                                                    label="Reject" 
+                                                    onclick={handleModerateComment}
+                                                    data-comment-id={comment.Id}>
+                                                </lightning-menu-item>
+                                            </template>
+                                            <lightning-menu-item 
+                                                value="delete" 
+                                                label="Delete" 
+                                                onclick={handleDeleteComment}
+                                                data-comment-id={comment.Id}>
+                                            </lightning-menu-item>
+                                        </lightning-button-menu>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <div class="comment-content">
+                                <div class="comment-text slds-text-body_regular">
+                                    {comment.Comment_Text__c}
+                                </div>
+                                
+                                <!-- Comment Status Badge (Admin Only) -->
+                                <template if:true={showAdminActions}>
+                                    <div class="comment-status slds-m-top_small">
+                                        <span class={comment.statusBadgeClass}>
+                                            {comment.Status__c}
+                                        </span>
+                                    </div>
+                                </template>
+                            </div>
+                        </article>
+                    </template>
+                </div>
+
+                <!-- Load More Comments -->
+                <template if:true={showLoadMore}>
+                    <div class="load-more-container slds-text-align_center slds-m-top_large">
+                        <lightning-button
+                            variant="neutral"
+                            label="Load More Comments"
+                            icon-name="utility:down"
+                            onclick={handleLoadMore}
+                            disabled={isLoadingMore}>
+                        </lightning-button>
+                    </div>
+                </template>
+            </div>
+        </template>
+
+        <!-- No Comments Message -->
+        <template if:false={hasComments}>
+            <template if:false={isLoading}>
+                <div class="no-comments slds-align_absolute-center slds-m-vertical_large">
+                    <div class="slds-text-align_center">
+                        <lightning-icon icon-name="utility:comments" size="large" class="slds-m-bottom_medium" style="opacity: 0.5;"></lightning-icon>
+                        <h4 class="slds-text-heading_small slds-m-bottom_small">No Comments Yet</h4>
+                        <p class="slds-text-body_regular slds-text-color_weak">
+                            Be the first to share your thoughts on this post!
+                        </p>
+                    </div>
+                </div>
+            </template>
+        </template>
+
+        <!-- Success Message -->
+        <template if:true={showSuccessMessage}>
+            <div class="success-message">
+                <div class="slds-notify slds-notify_toast slds-theme_success" role="status">
+                    <span class="slds-assistive-text">Success</span>
+                    <span class="slds-icon_container slds-m-right_small">
+                        <lightning-icon icon-name="utility:success" size="small"></lightning-icon>
+                    </span>
+                    <div class="slds-notify__content">
+                        <h2 class="slds-text-heading_small">Comment Submitted!</h2>
+                        <div class="slds-text-body_small">
+                            Your comment has been submitted and is awaiting moderation.
+                        </div>
+                    </div>
+                    <div class="slds-notify__close">
+                        <lightning-button-icon
+                            icon-name="utility:close"
+                            variant="bare-inverse"
+                            alternative-text="Close"
+                            onclick={handleCloseSuccess}>
+                        </lightning-button-icon>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

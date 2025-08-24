@@ -1,0 +1,371 @@
+<template>
+    <div class="blog-dashboard">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header slds-page-header">
+            <div class="slds-grid slds-grid_align-spread">
+                <div class="slds-col">
+                    <h1 class="slds-text-heading_large">
+                        <lightning-icon icon-name="utility:dashboard" size="medium" class="slds-m-right_small"></lightning-icon>
+                        Blog Dashboard
+                    </h1>
+                    <p class="slds-text-body_regular slds-m-top_x-small">
+                        Manage your blog content and monitor engagement
+                    </p>
+                </div>
+                <div class="slds-col slds-no-flex">
+                    <lightning-button-group>
+                        <lightning-button
+                            variant="brand"
+                            label="New Post"
+                            icon-name="utility:add"
+                            onclick={handleCreatePost}>
+                        </lightning-button>
+                        <lightning-button
+                            variant="neutral"
+                            label="Refresh"
+                            icon-name="utility:refresh"
+                            onclick={handleRefresh}>
+                        </lightning-button>
+                    </lightning-button-group>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <template if:true={isLoading}>
+            <div class="slds-align_absolute-center slds-m-vertical_xx-large">
+                <lightning-spinner alternative-text="Loading dashboard..."></lightning-spinner>
+            </div>
+        </template>
+
+        <!-- Error Message -->
+        <template if:true={error}>
+            <div class="slds-m-vertical_medium">
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                    <span class="slds-assistive-text">Error</span>
+                    <h2>
+                        <lightning-icon icon-name="utility:error" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                        {error}
+                    </h2>
+                </div>
+            </div>
+        </template>
+
+        <!-- Dashboard Content -->
+        <template if:false={isLoading}>
+            <!-- Key Metrics Row -->
+            <div class="metrics-section slds-m-vertical_large">
+                <h2 class="slds-text-heading_medium slds-m-bottom_medium">Overview</h2>
+                <div class="metrics-grid slds-grid slds-wrap slds-gutters">
+                    <!-- Total Posts -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                        <div class="metric-card slds-box">
+                            <div class="metric-header slds-grid slds-grid_align-spread">
+                                <div class="slds-col">
+                                    <h3 class="metric-title slds-text-body_small">Total Posts</h3>
+                                </div>
+                                <div class="slds-col slds-no-flex">
+                                    <lightning-icon icon-name="utility:file" size="small" class="metric-icon"></lightning-icon>
+                                </div>
+                            </div>
+                            <div class="metric-value slds-text-heading_large">{dashboardStats.totalPosts}</div>
+                            <div class="metric-change slds-text-body_small">
+                                <span class="change-indicator">{dashboardStats.postsChange}</span>
+                                this month
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Published Posts -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                        <div class="metric-card slds-box">
+                            <div class="metric-header slds-grid slds-grid_align-spread">
+                                <div class="slds-col">
+                                    <h3 class="metric-title slds-text-body_small">Published</h3>
+                                </div>
+                                <div class="slds-col slds-no-flex">
+                                    <lightning-icon icon-name="utility:success" size="small" class="metric-icon success"></lightning-icon>
+                                </div>
+                            </div>
+                            <div class="metric-value slds-text-heading_large">{dashboardStats.publishedPosts}</div>
+                            <div class="metric-change slds-text-body_small">
+                                <span class="change-indicator">{dashboardStats.publishedChange}</span>
+                                this month
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Views -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                        <div class="metric-card slds-box">
+                            <div class="metric-header slds-grid slds-grid_align-spread">
+                                <div class="slds-col">
+                                    <h3 class="metric-title slds-text-body_small">Total Views</h3>
+                                </div>
+                                <div class="slds-col slds-no-flex">
+                                    <lightning-icon icon-name="utility:preview" size="small" class="metric-icon"></lightning-icon>
+                                </div>
+                            </div>
+                            <div class="metric-value slds-text-heading_large">{dashboardStats.totalViews}</div>
+                            <div class="metric-change slds-text-body_small">
+                                <span class="change-indicator">{dashboardStats.viewsChange}</span>
+                                this month
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pending Comments -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                        <div class="metric-card slds-box">
+                            <div class="metric-header slds-grid slds-grid_align-spread">
+                                <div class="slds-col">
+                                    <h3 class="metric-title slds-text-body_small">Pending Comments</h3>
+                                </div>
+                                <div class="slds-col slds-no-flex">
+                                    <lightning-icon icon-name="utility:comments" size="small" class="metric-icon warning"></lightning-icon>
+                                </div>
+                            </div>
+                            <div class="metric-value slds-text-heading_large">{dashboardStats.pendingComments}</div>
+                            <div class="metric-action slds-text-body_small">
+                                <lightning-button
+                                    variant="base"
+                                    label="Review"
+                                    onclick={handleReviewComments}
+                                    disabled={noPendingComments}>
+                                </lightning-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Management Section -->
+            <div class="content-section slds-grid slds-wrap slds-gutters slds-m-vertical_large">
+                <!-- Recent Posts -->
+                <div class="slds-col slds-size_1-of-1 slds-large-size_2-of-3">
+                    <div class="content-panel slds-box">
+                        <div class="panel-header slds-grid slds-grid_align-spread slds-m-bottom_medium">
+                            <div class="slds-col">
+                                <h3 class="slds-text-heading_small">Recent Posts</h3>
+                            </div>
+                            <div class="slds-col slds-no-flex">
+                                <lightning-button
+                                    variant="neutral"
+                                    label="View All"
+                                    onclick={handleViewAllPosts}>
+                                </lightning-button>
+                            </div>
+                        </div>
+
+                        <template if:true={hasRecentPosts}>
+                            <div class="recent-posts-list">
+                                <template for:each={recentPosts} for:item="post">
+                                    <div key={post.Id} class="post-item slds-grid slds-grid_align-spread slds-p-vertical_small">
+                                        <div class="slds-col">
+                                            <div class="post-info">
+                                                <h4 class="post-title">
+                                                    <a href="javascript:void(0)" 
+                                                       onclick={handlePostClick} 
+                                                       data-slug={post.URL_Slug__c}
+                                                       class="post-link">
+                                                        {post.Name}
+                                                    </a>
+                                                </h4>
+                                                <div class="post-meta slds-grid slds-gutters slds-m-top_x-small">
+                                                    <div class="slds-col">
+                                                        <span class={post.statusClass}>{post.Status__c}</span>
+                                                    </div>
+                                                    <div class="slds-col">
+                                                        <span class="slds-text-body_small slds-text-color_weak">
+                                                            <lightning-formatted-date-time value={post.LastModifiedDate}></lightning-formatted-date-time>
+                                                        </span>
+                                                    </div>
+                                                    <div class="slds-col">
+                                                        <span class="slds-text-body_small slds-text-color_weak">
+                                                            {post.View_Count__c} views
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-no-flex">
+                                            <lightning-button-menu
+                                                alternative-text="Post actions"
+                                                icon-name="utility:down"
+                                                variant="border-filled">
+                                                <lightning-menu-item 
+                                                    value="edit" 
+                                                    label="Edit" 
+                                                    onclick={handlePostAction}
+                                                    data-post-id={post.Id}
+                                                    data-post-slug={post.URL_Slug__c}>
+                                                </lightning-menu-item>
+                                                <lightning-menu-item 
+                                                    value="view" 
+                                                    label="View" 
+                                                    onclick={handlePostAction}
+                                                    data-post-slug={post.URL_Slug__c}>
+                                                </lightning-menu-item>
+                                                <template if:true={post.canPublish}>
+                                                    <lightning-menu-item 
+                                                        value="publish" 
+                                                        label="Publish" 
+                                                        onclick={handlePostAction}
+                                                        data-post-id={post.Id}>
+                                                    </lightning-menu-item>
+                                                </template>
+                                                <lightning-menu-item 
+                                                    value="delete" 
+                                                    label="Delete" 
+                                                    onclick={handlePostAction}
+                                                    data-post-id={post.Id}>
+                                                </lightning-menu-item>
+                                            </lightning-button-menu>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+
+                        <template if:false={hasRecentPosts}>
+                            <div class="empty-state slds-text-align_center slds-p-vertical_large">
+                                <lightning-icon icon-name="utility:file" size="large" class="slds-m-bottom_medium" style="opacity: 0.5;"></lightning-icon>
+                                <h4 class="slds-text-heading_small slds-m-bottom_small">No Posts Yet</h4>
+                                <p class="slds-text-body_regular slds-text-color_weak slds-m-bottom_medium">
+                                    Start creating content for your blog
+                                </p>
+                                <lightning-button
+                                    variant="brand"
+                                    label="Create Your First Post"
+                                    onclick={handleCreatePost}>
+                                </lightning-button>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Quick Actions & Stats -->
+                <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-3">
+                    <!-- Quick Actions -->
+                    <div class="content-panel slds-box slds-m-bottom_medium">
+                        <h3 class="slds-text-heading_small slds-m-bottom_medium">Quick Actions</h3>
+                        <div class="quick-actions">
+                            <lightning-button
+                                variant="neutral"
+                                label="Manage Categories"
+                                icon-name="utility:topic"
+                                onclick={handleManageCategories}
+                                class="action-button">
+                            </lightning-button>
+                            <lightning-button
+                                variant="neutral"
+                                label="Moderate Comments"
+                                icon-name="utility:comments"
+                                onclick={handleModerateComments}
+                                class="action-button">
+                            </lightning-button>
+                            <lightning-button
+                                variant="neutral"
+                                label="View Analytics"
+                                icon-name="utility:chart"
+                                onclick={handleViewAnalytics}
+                                class="action-button">
+                            </lightning-button>
+                            <lightning-button
+                                variant="neutral"
+                                label="Export Posts"
+                                icon-name="utility:download"
+                                onclick={handleExportPosts}
+                                class="action-button">
+                            </lightning-button>
+                        </div>
+                    </div>
+
+                    <!-- Categories Overview -->
+                    <div class="content-panel slds-box slds-m-bottom_medium">
+                        <h3 class="slds-text-heading_small slds-m-bottom_medium">Categories</h3>
+                        <template if:true={hasCategories}>
+                            <div class="categories-list">
+                                <template for:each={categories} for:item="category">
+                                    <div key={category.Id} class="category-item slds-grid slds-grid_align-spread slds-p-vertical_x-small">
+                                        <div class="slds-col">
+                                            <span class="category-name">{category.Name}</span>
+                                        </div>
+                                        <div class="slds-col slds-no-flex">
+                                            <span class="slds-text-body_small slds-text-color_weak">
+                                                {category.postCount} posts
+                                            </span>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                        <template if:false={hasCategories}>
+                            <p class="slds-text-body_small slds-text-color_weak">No categories created yet</p>
+                        </template>
+                    </div>
+
+                    <!-- Popular Tags -->
+                    <div class="content-panel slds-box">
+                        <h3 class="slds-text-heading_small slds-m-bottom_medium">Popular Tags</h3>
+                        <template if:true={hasPopularTags}>
+                            <div class="tags-cloud">
+                                <template for:each={popularTags} for:item="tag">
+                                    <lightning-button
+                                        key={tag.Id}
+                                        variant="neutral"
+                                        label={tag.displayName}
+                                        size="small"
+                                        onclick={handleTagClick}
+                                        data-tag={tag.Name}
+                                        class="tag-button">
+                                    </lightning-button>
+                                </template>
+                            </div>
+                        </template>
+                        <template if:false={hasPopularTags}>
+                            <p class="slds-text-body_small slds-text-color_weak">No tags created yet</p>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity Feed -->
+            <div class="activity-section slds-m-vertical_large">
+                <h2 class="slds-text-heading_medium slds-m-bottom_medium">Recent Activity</h2>
+                <div class="activity-feed slds-box">
+                    <template if:true={hasRecentActivity}>
+                        <div class="activity-list">
+                            <template for:each={recentActivity} for:item="activity">
+                                <div key={activity.id} class="activity-item slds-grid slds-p-vertical_small">
+                                    <div class="slds-col slds-no-flex slds-m-right_small">
+                                        <div class="activity-icon">
+                                            <lightning-icon icon-name={activity.icon} size="x-small"></lightning-icon>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col">
+                                        <div class="activity-content">
+                                            <p class="slds-text-body_regular">{activity.description}</p>
+                                            <p class="slds-text-body_small slds-text-color_weak">
+                                                <lightning-formatted-date-time value={activity.timestamp}></lightning-formatted-date-time>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                    <template if:false={hasRecentActivity}>
+                        <div class="empty-state slds-text-align_center slds-p-vertical_large">
+                            <lightning-icon icon-name="utility:activity" size="large" class="slds-m-bottom_medium" style="opacity: 0.5;"></lightning-icon>
+                            <h4 class="slds-text-heading_small slds-m-bottom_small">No Recent Activity</h4>
+                            <p class="slds-text-body_regular slds-text-color_weak">
+                                Activity will appear here as you create and manage content
+                            </p>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

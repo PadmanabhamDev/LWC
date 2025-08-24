@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <brand>
+        <headerColor>#0176D3</headerColor>
+        <shouldOverrideOrgTheme>false</shouldOverrideOrgTheme>
+    </brand>
+    <description>Comprehensive blog management application built with Lightning Web Components</description>
+    <formFactors>Small</formFactors>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
+    <label>Blog Site</label>
+    <navType>Standard</navType>
+    <!-- <tabs>Blog_Dashboard</tabs> -->
+    <tabs>Blog_Posts</tabs>
+    <tabs>Blog_Category__c</tabs>
+    <tabs>Blog_Tag__c</tabs>
+    <tabs>Blog_Comment__c</tabs>
+    <uiType>Lightning</uiType>
+</CustomApplication>

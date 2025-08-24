@@ -1,0 +1,337 @@
+<template>
+    <div class="blog-search">
+        <!-- Search Header -->
+        <div class="search-header slds-page-header">
+            <div class="slds-grid slds-grid_align-center">
+                <div class="slds-col">
+                    <h1 class="slds-text-heading_large slds-text-align_center">
+                        <lightning-icon icon-name="utility:search" size="medium" class="slds-m-right_small"></lightning-icon>
+                        Search Blog Posts
+                    </h1>
+                    <p class="slds-text-body_regular slds-text-align_center slds-m-top_small">
+                        Find articles, topics, and insights
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Form -->
+        <div class="search-form-container slds-m-vertical_large">
+            <div class="slds-grid slds-grid_align-center">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-3 slds-large-size_1-of-2">
+                    <div class="search-form">
+                        <!-- Main Search Input -->
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_left-right">
+                                <lightning-icon icon-name="utility:search" size="x-small" class="slds-input__icon slds-input__icon_left"></lightning-icon>
+                                <lightning-input
+                                    type="search"
+                                    placeholder="Search for blog posts..."
+                                    value={searchTerm}
+                                    onchange={handleSearchTermChange}
+                                    onkeyup={handleKeyUp}
+                                    class="search-input">
+                                </lightning-input>
+                                <template if:true={searchTerm}>
+                                    <lightning-button-icon
+                                        icon-name="utility:clear"
+                                        variant="bare"
+                                        alternative-text="Clear search"
+                                        title="Clear search"
+                                        onclick={handleClearSearch}
+                                        class="slds-input__icon slds-input__icon_right">
+                                    </lightning-button-icon>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- Search Suggestions -->
+                        <template if:true={showSuggestions}>
+                            <div class="suggestions-dropdown slds-dropdown slds-dropdown_left">
+                                <ul class="slds-dropdown__list" role="listbox">
+                                    <template for:each={suggestions} for:item="suggestion">
+                                        <li key={suggestion} class="slds-dropdown__item" role="option">
+                                            <a href="javascript:void(0)" 
+                                               onclick={handleSuggestionClick} 
+                                               data-suggestion={suggestion}
+                                               class="slds-dropdown__link">
+                                                <span class="slds-truncate">
+                                                    <lightning-icon icon-name="utility:search" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                                                    {suggestion}
+                                                </span>
+                                            </a>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </div>
+                        </template>
+
+                        <!-- Search Filters -->
+                        <div class="search-filters slds-grid slds-wrap slds-gutters slds-m-top_medium">
+                            <!-- Category Filter -->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <lightning-combobox
+                                    name="category"
+                                    label="Category"
+                                    value={selectedCategory}
+                                    placeholder="All Categories"
+                                    options={categoryOptions}
+                                    onchange={handleCategoryChange}>
+                                </lightning-combobox>
+                            </div>
+                            
+                            <!-- Search Button -->
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-grid slds-grid_align-end">
+                                <lightning-button
+                                    variant="brand"
+                                    label="Search"
+                                    icon-name="utility:search"
+                                    onclick={handleSearch}
+                                    disabled={isSearchDisabled}
+                                    class="search-button">
+                                </lightning-button>
+                            </div>
+                        </div>
+
+                        <!-- Recent Searches -->
+                        <template if:true={showRecentSearches}>
+                            <div class="recent-searches slds-m-top_medium">
+                                <h3 class="slds-text-body_small slds-text-color_weak slds-m-bottom_x-small">Recent Searches:</h3>
+                                <div class="recent-tags">
+                                    <template for:each={recentSearches} for:item="search">
+                                        <lightning-button
+                                            key={search}
+                                            variant="neutral"
+                                            label={search}
+                                            size="small"
+                                            onclick={handleRecentSearchClick}
+                                            data-search={search}
+                                            class="recent-tag">
+                                        </lightning-button>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Results Summary -->
+        <template if:true={hasSearched}>
+            <div class="search-results-summary slds-m-bottom_medium">
+                <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                    <div class="slds-col">
+                        <h2 class="slds-text-heading_small">
+                            Search Results {searchResultsText}
+                        </h2>
+                        <p class="slds-text-body_small slds-text-color_weak">
+                            {totalResults} {resultsLabel} found
+                            <template if:true={searchDuration}>
+                                in {searchDuration}ms
+                            </template>
+                        </p>
+                    </div>
+                    <div class="slds-col slds-no-flex">
+                        <template if:true={hasResults}>
+                            <lightning-button-menu
+                                alternative-text="Sort options"
+                                icon-name="utility:sort"
+                                variant="border-filled">
+                                <lightning-menu-item value="date-desc" label="Newest First" onclick={handleSortChange}></lightning-menu-item>
+                                <lightning-menu-item value="date-asc" label="Oldest First" onclick={handleSortChange}></lightning-menu-item>
+                                <lightning-menu-item value="relevance" label="Most Relevant" onclick={handleSortChange}></lightning-menu-item>
+                                <lightning-menu-item value="views" label="Most Viewed" onclick={handleSortChange}></lightning-menu-item>
+                            </lightning-button-menu>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Loading Spinner -->
+        <template if:true={isLoading}>
+            <div class="slds-align_absolute-center slds-m-vertical_xx-large">
+                <lightning-spinner alternative-text="Searching..."></lightning-spinner>
+            </div>
+        </template>
+
+        <!-- Error Message -->
+        <template if:true={error}>
+            <div class="slds-m-vertical_medium">
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                    <span class="slds-assistive-text">Error</span>
+                    <h2>
+                        <lightning-icon icon-name="utility:error" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                        {error}
+                    </h2>
+                </div>
+            </div>
+        </template>
+
+        <!-- Search Results -->
+        <template if:true={hasResults}>
+            <div class="search-results">
+                <div class="results-grid slds-grid slds-wrap slds-gutters">
+                    <template for:each={searchResults} for:item="post">
+                        <div key={post.Id} class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                            <article class="result-card slds-card">
+                                <!-- Featured Image -->
+                                <template if:true={post.Featured_Image_URL__c}>
+                                    <div class="slds-card__header featured-image">
+                                        <img src={post.Featured_Image_URL__c} alt={post.Name} class="featured-img">
+                                    </div>
+                                </template>
+                                
+                                <div class="slds-card__body slds-card__body_inner">
+                                    <!-- Category Badge -->
+                                    <template if:true={post.Category__r}>
+                                        <div class="slds-m-bottom_x-small">
+                                            <span class="category-badge slds-badge" style={post.categoryStyle}>
+                                                {post.Category__r.Name}
+                                            </span>
+                                        </div>
+                                    </template>
+
+                                    <!-- Post Title -->
+                                    <h3 class="slds-card__header-title">
+                                        <a href="javascript:void(0)" 
+                                           onclick={handlePostClick} 
+                                           data-slug={post.URL_Slug__c}
+                                           class="post-title-link slds-text-heading_small">
+                                            {post.Name}
+                                        </a>
+                                    </h3>
+
+                                    <!-- Post Excerpt -->
+                                    <div class="slds-m-top_small">
+                                        <p class="post-excerpt slds-text-body_small">
+                                            {post.Excerpt__c}
+                                        </p>
+                                    </div>
+
+                                    <!-- Post Meta -->
+                                    <div class="post-meta slds-grid slds-grid_align-spread slds-m-top_small">
+                                        <div class="slds-col">
+                                            <p class="slds-text-body_small slds-text-color_weak">
+                                                <lightning-icon icon-name="utility:user" size="xx-small" class="slds-m-right_xx-small"></lightning-icon>
+                                                {post.Author__r.Name}
+                                            </p>
+                                        </div>
+                                        <div class="slds-col slds-no-flex">
+                                            <p class="slds-text-body_small slds-text-color_weak">
+                                                <lightning-icon icon-name="utility:preview" size="xx-small" class="slds-m-right_xx-small"></lightning-icon>
+                                                {post.View_Count__c} views
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card Footer -->
+                                <div class="slds-card__footer">
+                                    <lightning-button
+                                        variant="neutral"
+                                        label="Read More"
+                                        onclick={handlePostClick}
+                                        data-slug={post.URL_Slug__c}
+                                        class="slds-button_stretch">
+                                    </lightning-button>
+                                </div>
+                            </article>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Pagination -->
+                <template if:true={showPagination}>
+                    <div class="pagination-container slds-m-top_large">
+                        <div class="slds-grid slds-grid_align-center">
+                            <div class="slds-col">
+                                <lightning-button-group>
+                                    <lightning-button
+                                        label="Previous"
+                                        icon-name="utility:chevronleft"
+                                        onclick={handlePreviousPage}
+                                        disabled={isFirstPage}>
+                                    </lightning-button>
+                                    
+                                    <template for:each={pageNumbers} for:item="pageNum">
+                                        <lightning-button
+                                            key={pageNum}
+                                            label={pageNum.number}
+                                            variant={pageNum.variant}
+                                            onclick={handlePageClick}
+                                            data-page={pageNum.number}>
+                                        </lightning-button>
+                                    </template>
+                                    
+                                    <lightning-button
+                                        label="Next"
+                                        icon-name="utility:chevronright"
+                                        icon-position="right"
+                                        onclick={handleNextPage}
+                                        disabled={isLastPage}>
+                                    </lightning-button>
+                                </lightning-button-group>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </template>
+
+        <!-- No Results Message -->
+        <template if:true={showNoResults}>
+            <div class="no-results slds-align_absolute-center slds-m-vertical_xx-large">
+                <div class="slds-text-align_center">
+                    <lightning-icon icon-name="utility:search" size="large" class="slds-m-bottom_medium" style="opacity: 0.5;"></lightning-icon>
+                    <h3 class="slds-text-heading_small slds-m-bottom_small">No Results Found</h3>
+                    <p class="slds-text-body_regular slds-text-color_weak slds-m-bottom_medium">
+                        We couldn't find any blog posts matching your search criteria.
+                    </p>
+                    <div class="search-suggestions">
+                        <h4 class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">Try:</h4>
+                        <ul class="slds-list_dotted slds-text-body_small slds-text-color_weak">
+                            <li>Different keywords or phrases</li>
+                            <li>Checking for typos</li>
+                            <li>Using broader search terms</li>
+                            <li>Browsing all categories</li>
+                        </ul>
+                    </div>
+                    <lightning-button
+                        variant="brand"
+                        label="Browse All Posts"
+                        onclick={handleBrowseAll}
+                        class="slds-m-top_medium">
+                    </lightning-button>
+                </div>
+            </div>
+        </template>
+
+        <!-- Popular Tags Section -->
+        <template if:false={hasSearched}>
+            <div class="popular-tags-section slds-m-top_xx-large">
+                <h3 class="slds-text-heading_small slds-text-align_center slds-m-bottom_medium">Popular Topics</h3>
+                <template if:true={popularTags}>
+                    <div class="popular-tags slds-grid slds-grid_align-center">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-3">
+                            <div class="tags-container">
+                                <template for:each={popularTags} for:item="tag">
+                                    <lightning-button
+                                        key={tag.Id}
+                                        variant="neutral"
+                                        label={tag.Name}
+                                        size="small"
+                                        onclick={handleTagSearch}
+                                        data-tag={tag.Name}
+                                        class="popular-tag">
+                                    </lightning-button>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </template>
+    </div>
+</template>

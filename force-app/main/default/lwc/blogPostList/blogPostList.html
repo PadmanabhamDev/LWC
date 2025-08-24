@@ -1,0 +1,212 @@
+<template>
+    <div class="blog-post-list">
+        <!-- Header Section -->
+        <div class="slds-page-header">
+            <div class="slds-grid slds-grid_align-spread">
+                <div class="slds-col">
+                    <h1 class="slds-page-header__title slds-text-heading_large">
+                        {pageTitle}
+                    </h1>
+                    <p class="slds-text-body_regular slds-m-top_x-small">
+                        {pageDescription}
+                    </p>
+                </div>
+                <div class="slds-col slds-no-flex">
+                    <template if:true={showCreateButton}>
+                        <lightning-button
+                            variant="brand"
+                            label="Create New Post"
+                            icon-name="utility:add"
+                            onclick={handleCreatePost}>
+                        </lightning-button>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="slds-m-vertical_medium">
+            <div class="category-filter">
+                <lightning-button-group>
+                    <lightning-button
+                        label="All Categories"
+                        variant={allCategoriesVariant}
+                        onclick={handleCategoryFilter}
+                        data-category="">
+                    </lightning-button>
+                    <template for:each={categories} for:item="category">
+                        <lightning-button
+                            key={category.Id}
+                            label={category.Name}
+                            variant={category.variant}
+                            onclick={handleCategoryFilter}
+                            data-category={category.Id}>
+                        </lightning-button>
+                    </template>
+                </lightning-button-group>
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <template if:true={isLoading}>
+            <div class="slds-align_absolute-center slds-m-vertical_large">
+                <lightning-spinner alternative-text="Loading blog posts..."></lightning-spinner>
+            </div>
+        </template>
+
+        <!-- Error Message -->
+        <template if:true={error}>
+            <div class="slds-m-vertical_medium">
+                <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                    <span class="slds-assistive-text">Error</span>
+                    <h2>
+                        <lightning-icon icon-name="utility:error" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                        {error}
+                    </h2>
+                </div>
+            </div>
+        </template>
+
+        <!-- Blog Posts Grid -->
+        <template if:false={isLoading}>
+            <template if:true={hasPosts}>
+                <div class="blog-posts-grid slds-grid slds-wrap slds-gutters">
+                    <template for:each={blogPosts} for:item="post">
+                        <div key={post.Id} class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                            <article class="blog-post-card slds-card slds-m-bottom_medium">
+                                <!-- Featured Image -->
+                                <template if:true={post.Featured_Image_URL__c}>
+                                    <div class="slds-card__header featured-image">
+                                        <img src={post.Featured_Image_URL__c} alt={post.Name} class="featured-img">
+                                    </div>
+                                </template>
+                                
+                                <div class="slds-card__body slds-card__body_inner">
+                                    <!-- Category Badge -->
+                                    <template if:true={post.Category__r}>
+                                        <div class="slds-m-bottom_x-small">
+                                            <span class="category-badge slds-badge" style={post.categoryStyle}>
+                                                {post.Category__r.Name}
+                                            </span>
+                                        </div>
+                                    </template>
+
+                                    <!-- Post Title -->
+                                    <h2 class="slds-card__header-title">
+                                        <a href="javascript:void(0)" 
+                                           onclick={handlePostClick} 
+                                           data-slug={post.URL_Slug__c}
+                                           class="post-title-link slds-text-heading_medium">
+                                            {post.Name}
+                                        </a>
+                                    </h2>
+
+                                    <!-- Post Excerpt -->
+                                    <div class="slds-m-top_small">
+                                        <p class="post-excerpt slds-text-body_regular">
+                                            {post.Excerpt__c}
+                                        </p>
+                                    </div>
+
+                                    <!-- Post Meta -->
+                                    <div class="post-meta slds-grid slds-grid_align-spread slds-m-top_medium">
+                                        <div class="slds-col">
+                                            <p class="slds-text-body_small slds-text-color_weak">
+                                                <lightning-icon icon-name="utility:user" size="xx-small" class="slds-m-right_xx-small"></lightning-icon>
+                                                {post.Author__r.Name}
+                                            </p>
+                                            <p class="slds-text-body_small slds-text-color_weak">
+                                                <lightning-icon icon-name="utility:event" size="xx-small" class="slds-m-right_xx-small"></lightning-icon>
+                                                <lightning-formatted-date-time value={post.Published_Date__c}></lightning-formatted-date-time>
+                                            </p>
+                                        </div>
+                                        <div class="slds-col slds-no-flex">
+                                            <p class="slds-text-body_small slds-text-color_weak">
+                                                <lightning-icon icon-name="utility:preview" size="xx-small" class="slds-m-right_xx-small"></lightning-icon>
+                                                {post.View_Count__c} views
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card Footer -->
+                                <div class="slds-card__footer">
+                                    <lightning-button
+                                        variant="neutral"
+                                        label="Read More"
+                                        onclick={handlePostClick}
+                                        data-slug={post.URL_Slug__c}
+                                        class="slds-button_stretch">
+                                    </lightning-button>
+                                </div>
+                            </article>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Pagination -->
+                <template if:true={showPagination}>
+                    <div class="pagination-container slds-m-top_large">
+                        <div class="slds-grid slds-grid_align-center">
+                            <div class="slds-col">
+                                <lightning-button-group>
+                                    <lightning-button
+                                        label="Previous"
+                                        icon-name="utility:chevronleft"
+                                        onclick={handlePreviousPage}
+                                        disabled={isFirstPage}>
+                                    </lightning-button>
+                                    
+                                    <template for:each={pageNumbers} for:item="pageNum">
+                                        <lightning-button
+                                            key={pageNum}
+                                            label={pageNum}
+                                            variant={pageNum.variant}
+                                            onclick={handlePageClick}
+                                            data-page={pageNum.number}>
+                                        </lightning-button>
+                                    </template>
+                                    
+                                    <lightning-button
+                                        label="Next"
+                                        icon-name="utility:chevronright"
+                                        icon-position="right"
+                                        onclick={handleNextPage}
+                                        disabled={isLastPage}>
+                                    </lightning-button>
+                                </lightning-button-group>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-text-align_center slds-m-top_small">
+                            <p class="slds-text-body_small slds-text-color_weak">
+                                Showing {startRecord} - {endRecord} of {totalRecords} posts
+                            </p>
+                        </div>
+                    </div>
+                </template>
+            </template>
+
+            <!-- No Posts Message -->
+            <template if:false={hasPosts}>
+                <div class="slds-align_absolute-center slds-m-vertical_xx-large">
+                    <div class="slds-text-align_center">
+                        <lightning-icon icon-name="utility:file" size="large" class="slds-m-bottom_medium"></lightning-icon>
+                        <h3 class="slds-text-heading_small slds-m-bottom_small">No Blog Posts Found</h3>
+                        <p class="slds-text-body_regular slds-text-color_weak">
+                            {noBlogPostsMessage}
+                        </p>
+                        <template if:true={showCreateButton}>
+                            <lightning-button
+                                variant="brand"
+                                label="Create Your First Post"
+                                onclick={handleCreatePost}
+                                class="slds-m-top_medium">
+                            </lightning-button>
+                        </template>
+                    </div>
+                </div>
+            </template>
+        </template>
+    </div>
+</template>

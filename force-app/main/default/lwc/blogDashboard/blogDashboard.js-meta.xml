@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+        <target>lightning__Tab</target>
+    </targets>
+    <!-- <targetConfigs>
+        <targetConfig targets="lightning__AppPage,lightning__HomePage,lightningCommunity__Default">
+            <property name="showAdvancedMetrics" type="Boolean" default="true" label="Show Advanced Metrics" description="Display detailed analytics and performance metrics"/>
+            <property name="autoRefreshInterval" type="Integer" default="300" label="Auto Refresh Interval (seconds)" description="How often to automatically refresh dashboard data (0 to disable)"/>
+        </targetConfig>
+    </targetConfigs> -->
+</LightningComponentBundle>

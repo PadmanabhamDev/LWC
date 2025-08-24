@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+        <target>lightning__Tab</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__AppPage,lightningCommunity__Default">
+            <property name="showAdminActions" type="Boolean" default="false" label="Show Admin Actions" description="Show moderation actions for administrators"/>
+            <property name="showAdminStats" type="Boolean" default="false" label="Show Admin Statistics" description="Show comment statistics for administrators"/>
+            <property name="commentsPerPage" type="Integer" default="10" label="Comments Per Page" description="Number of comments to display initially"/>
+        </targetConfig>
+        <targetConfig targets="lightning__RecordPage">
+            <property name="showAdminActions" type="Boolean" default="true" label="Show Admin Actions" description="Show moderation actions for administrators"/>
+            <property name="showAdminStats" type="Boolean" default="true" label="Show Admin Statistics" description="Show comment statistics for administrators"/>
+            <property name="commentsPerPage" type="Integer" default="20" label="Comments Per Page" description="Number of comments to display initially"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

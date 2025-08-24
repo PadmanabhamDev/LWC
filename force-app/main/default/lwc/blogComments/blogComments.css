@@ -1,0 +1,449 @@
+/* Main Container */
+.blog-comments {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+/* Comments Header */
+.comments-header h3 {
+    color: #333;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid #0176d3;
+    padding-bottom: 0.5rem;
+}
+
+/* Comment Statistics */
+.comment-stats {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e5e5;
+}
+
+.stat-card {
+    background: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-number {
+    color: #0176d3;
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.stat-label {
+    color: #666;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Add Comment Form */
+.add-comment-form {
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 0.75rem;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.add-comment-form h4 {
+    color: #333;
+    font-weight: 600;
+}
+
+/* Form Elements */
+.slds-form-element__label {
+    font-weight: 600;
+    color: #333;
+}
+
+.slds-required {
+    color: #d73648;
+}
+
+.slds-form-element__help {
+    color: #666;
+    font-size: 0.8rem;
+}
+
+/* Comment Guidelines */
+.comment-guidelines {
+    background: rgba(1, 118, 211, 0.1);
+    border-radius: 0.5rem;
+    padding: 0;
+}
+
+.comment-guidelines .slds-notify_toast {
+    border-radius: 0.5rem;
+    border: 1px solid rgba(1, 118, 211, 0.2);
+}
+
+/* Submit Button */
+.submit-button {
+    min-width: 150px;
+}
+
+/* Comments List */
+.comments-list h4 {
+    color: #333;
+    font-weight: 600;
+}
+
+.comments-container {
+    background: white;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+/* Comment Item */
+.comment-item {
+    padding: 1.5rem;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.3s ease;
+}
+
+.comment-item:last-child {
+    border-bottom: none;
+}
+
+.comment-item:hover {
+    background-color: #fafbfc;
+}
+
+/* Comment Header */
+.comment-header {
+    margin-bottom: 1rem;
+}
+
+.comment-author {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.author-avatar {
+    background: linear-gradient(135deg, #0176d3 0%, #014486 100%);
+    color: white;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.author-info {
+    flex-grow: 1;
+}
+
+.author-name {
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.comment-date {
+    margin: 0.25rem 0 0 0;
+}
+
+/* Comment Content */
+.comment-content {
+    padding-left: 3.25rem;
+}
+
+.comment-text {
+    line-height: 1.6;
+    color: #333;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* Comment Status Badge */
+.comment-status {
+    display: inline-block;
+}
+
+.comment-status .slds-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* Success Message */
+.success-message {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    z-index: 9999;
+    max-width: 400px;
+    animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Load More Container */
+.load-more-container {
+    padding: 2rem;
+    background: #f8f9fa;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+}
+
+/* No Comments */
+.no-comments {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.no-comments h4 {
+    color: #333;
+}
+
+/* Loading States */
+.slds-spinner_container {
+    position: relative;
+    min-height: 200px;
+}
+
+/* Error Message */
+.slds-notify_alert {
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .blog-comments {
+        padding: 0.5rem;
+    }
+    
+    .add-comment-form {
+        padding: 1.5rem;
+    }
+    
+    .comment-item {
+        padding: 1rem;
+    }
+    
+    .comment-content {
+        padding-left: 0;
+        margin-top: 1rem;
+    }
+    
+    .comment-author {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .author-avatar {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .comment-stats .slds-col {
+        margin-bottom: 0.5rem;
+    }
+    
+    .success-message {
+        top: 1rem;
+        right: 1rem;
+        left: 1rem;
+        max-width: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .add-comment-form {
+        padding: 1rem;
+    }
+    
+    .comment-item {
+        padding: 0.75rem;
+    }
+    
+    .author-avatar {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .stat-card {
+        padding: 0.75rem;
+    }
+    
+    .stat-number {
+        font-size: 1.25rem;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .add-comment-form,
+    .success-message,
+    .load-more-container {
+        display: none;
+    }
+    
+    .blog-comments {
+        max-width: none;
+        padding: 0;
+    }
+    
+    .comment-item {
+        break-inside: avoid;
+    }
+    
+    .comment-text {
+        font-size: 11pt;
+        line-height: 1.4;
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .comment-item {
+        border: 1px solid #000;
+        margin-bottom: 0.5rem;
+    }
+    
+    .add-comment-form {
+        border: 2px solid #000;
+    }
+    
+    .author-name,
+    .comment-text {
+        color: #000;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .blog-comments {
+        background-color: #1a1a1a;
+        color: #fff;
+    }
+    
+    .add-comment-form {
+        background-color: #2a2a2a;
+        border-color: #444;
+        color: #fff;
+    }
+    
+    .comment-item {
+        border-color: #444;
+    }
+    
+    .comment-item:hover {
+        background-color: #333;
+    }
+    
+    .author-name,
+    .comment-text {
+        color: #fff;
+    }
+    
+    .slds-form-element__label {
+        color: #fff;
+    }
+    
+    .stat-card {
+        background-color: #2a2a2a;
+        color: #fff;
+    }
+    
+    .comments-container {
+        background-color: #2a2a2a;
+    }
+    
+    .load-more-container {
+        background-color: #2a2a2a;
+    }
+}
+
+/* Animation for new comments */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.comment-item {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+/* Focus states for accessibility */
+.submit-button:focus,
+lightning-input:focus-within,
+lightning-textarea:focus-within {
+    outline: 2px solid #0176d3;
+    outline-offset: 2px;
+}
+
+/* Character count styling */
+.slds-form-element__help.slds-text-align_right {
+    font-family: monospace;
+    font-size: 0.75rem;
+}
+
+/* Admin action menu */
+lightning-button-menu {
+    margin-left: auto;
+}
+
+/* Comment threading (for future enhancement) */
+.comment-item.reply {
+    margin-left: 2rem;
+    border-left: 3px solid #0176d3;
+    padding-left: 1rem;
+}
+
+/* Accessibility improvements */
+.slds-assistive-text {
+    position: absolute !important;
+    margin: -1px !important;
+    border: 0 !important;
+    padding: 0 !important;
+    width: 1px !important;
+    height: 1px !important;
+    overflow: hidden !important;
+    clip: rect(0 0 0 0) !important;
+    text-transform: none !important;
+    white-space: nowrap !important;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .comment-item,
+    .stat-card,
+    .success-message,
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
