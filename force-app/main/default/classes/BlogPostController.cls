@@ -18,7 +18,7 @@ public with sharing class BlogPostController {
             Integer offset = (pageNumber - 1) * pageSize;
             String query = 'SELECT Id, Name, Excerpt__c, Featured_Image_URL__c, Published_Date__c, ' +
                           'Category__r.Name, Category__r.Color__c, Author__r.Name, View_Count__c, URL_Slug__c ' +
-                          'FROM Blog_Post__c WHERE Status__c = \'Published\' AND Published_Date__c <= NOW()';
+                          'FROM Blog_Post__c WHERE Status__c = \'Published\' AND Published_Date__c <= :System.now()';
             
             if (String.isNotBlank(categoryId)) {
                 query += ' AND Category__c = :categoryId';
@@ -29,7 +29,7 @@ public with sharing class BlogPostController {
             List<Blog_Post__c> posts = Database.query(query);
             
             // Get total count for pagination
-            String countQuery = 'SELECT COUNT() FROM Blog_Post__c WHERE Status__c = \'Published\' AND Published_Date__c <= NOW()';
+            String countQuery = 'SELECT COUNT() FROM Blog_Post__c WHERE Status__c = \'Published\' AND Published_Date__c <= :System.now()';
             if (String.isNotBlank(categoryId)) {
                 countQuery += ' AND Category__c = :categoryId';
             }
@@ -57,9 +57,10 @@ public with sharing class BlogPostController {
                        SEO_Title__c, SEO_Description__c
                 FROM Blog_Post__c 
                 WHERE URL_Slug__c = :urlSlug 
-                AND Status__c == 'Published' 
-                AND Published_Date__c == System.now()
-                LIMIT 1];
+                AND Status__c = 'Published' 
+                AND Published_Date__c <= :System.now()
+                LIMIT 1
+            ];
             
             if (posts.isEmpty()) {
                 throw new AuraHandledException('Blog post not found');

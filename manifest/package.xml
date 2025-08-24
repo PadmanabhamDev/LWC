@@ -1,36 +1,37 @@
-
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>BlogCommentController</members>
-        <members>BlogPostController</members>
-        <members>BlogSearchController</members>
+        <members>*</members>
         <name>ApexClass</name>
     </types>
     <types>
-        <members>Blog_Site</members>
-        <name>CustomApplication</name>
+        <members>*</members>
+        <name>ApexComponent</name>
     </types>
     <types>
-        <members>Blog_Category__c</members>
-        <members>Blog_Comment__c</members>
-        <members>Blog_Post__c</members>
-        <members>Blog_Tag__c</members>
-        <name>CustomObject</name>
+        <members>*</members>
+        <name>ApexPage</name>
     </types>
     <types>
-        <members>Blog_Dashboard</members>
-        <members>Blog_Posts</members>
-        <name>CustomTab</name>
+        <members>*</members>
+        <name>ApexTestSuite</name>
     </types>
     <types>
-        <members>blogComments</members>
-        <members>blogDashboard</members>
-        <members>blogPostDetail</members>
-        <members>blogPostEditor</members>
-        <members>blogPostList</members>
-        <members>blogSearch</members>
+        <members>*</members>
+        <name>ApexTrigger</name>
+    </types>
+    <types>
+        <members>*</members>
+        <name>AuraDefinitionBundle</name>
+    </types>
+    <types>
+        <members>*</members>
         <name>LightningComponentBundle</name>
     </types>
-    <version>59.0</version>
+    <types>
+        <members>*</members>
+        <name>StaticResource</name>
+    </types>
+    <version>63.0</version>
 </Package>
+

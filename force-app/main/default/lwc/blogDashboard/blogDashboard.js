@@ -1,15 +1,18 @@
-import { LightningElement, track, wire } from 'lwc';
+import { LightningElement, api, track, wire } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { refreshApex } from '@salesforce/apex';
-// import getBlogPosts from '@salesforce/apex/BlogPostController.getBlogPosts';
-// import getCategories from '@salesforce/apex/BlogPostController.getCategories';
-// import getPopularTags from '@salesforce/apex/BlogPostController.getPopularTags';
-// import getPendingComments from '@salesforce/apex/BlogCommentController.getPendingComments';
-// import deleteBlogPost from '@salesforce/apex/BlogPostController.deleteBlogPost';
-// import saveBlogPost from '@salesforce/apex/BlogPostController.saveBlogPost';
+import getBlogPosts from '@salesforce/apex/BlogPostController.getBlogPosts';
+import getCategories from '@salesforce/apex/BlogPostController.getCategories';
+import getPopularTags from '@salesforce/apex/BlogPostController.getPopularTags';
+import getPendingComments from '@salesforce/apex/BlogCommentController.getPendingComments';
+import deleteBlogPost from '@salesforce/apex/BlogPostController.deleteBlogPost';
+import saveBlogPost from '@salesforce/apex/BlogPostController.saveBlogPost';
 
 export default class BlogDashboard extends NavigationMixin(LightningElement) {
+    @api showAdvancedMetrics = false;
+    @api autoRefreshInterval = 300;
+    
     @track dashboardStats = {
         totalPosts: 0,
         publishedPosts: 0,
@@ -34,58 +37,58 @@ export default class BlogDashboard extends NavigationMixin(LightningElement) {
     wiredCommentsResult;
 
     // Wire methods
-    // @wire(getBlogPosts, { pageSize: 10, pageNumber: 1, categoryId: '' })
-    // wiredPosts(result) {
-    //     this.wiredPostsResult = result;
-    //     if (result.data) {
-    //         this.processPostsData(result.data);
-    //         this.error = undefined;
-    //     } else if (result.error) {
-    //         this.error = result.error.body?.message || 'Error loading posts';
-    //         console.error('Error loading posts:', result.error);
-    //     }
-    // }
+    @wire(getBlogPosts, { pageSize: 10, pageNumber: 1, categoryId: '' })
+    wiredPosts(result) {
+        this.wiredPostsResult = result;
+        if (result.data) {
+            this.processPostsData(result.data);
+            this.error = undefined;
+        } else if (result.error) {
+            this.error = result.error.body?.message || 'Error loading posts';
+            console.error('Error loading posts:', result.error);
+        }
+    }
 
-    // @wire(getCategories)
-    // wiredCategories(result) {
-    //     this.wiredCategoriesResult = result;
-    //     if (result.data) {
-    //         this.categories = result.data.map(category => ({
-    //             ...category,
-    //             postCount: 0 // Will be calculated from posts data
-    //         }));
-    //     } else if (result.error) {
-    //         console.error('Error loading categories:', result.error);
-    //     }
-    // }
+    @wire(getCategories)
+    wiredCategories(result) {
+        this.wiredCategoriesResult = result;
+        if (result.data) {
+            this.categories = result.data.map(category => ({
+                ...category,
+                postCount: 0 // Will be calculated from posts data
+            }));
+        } else if (result.error) {
+            console.error('Error loading categories:', result.error);
+        }
+    }
 
-    // @wire(getPopularTags)
-    // wiredTags(result) {
-    //     this.wiredTagsResult = result;
-    //     if (result.data) {
-    //         this.popularTags = result.data.map(tag => ({
-    //             ...tag,
-    //             displayName: `${tag.Name} (${tag.Usage_Count__c})`
-    //         }));
-    //     } else if (result.error) {
-    //         console.error('Error loading tags:', result.error);
-    //     }
-    // }
+    @wire(getPopularTags)
+    wiredTags(result) {
+        this.wiredTagsResult = result;
+        if (result.data) {
+            this.popularTags = result.data.map(tag => ({
+                ...tag,
+                displayName: `${tag.Name} (${tag.Usage_Count__c})`
+            }));
+        } else if (result.error) {
+            console.error('Error loading tags:', result.error);
+        }
+    }
 
-    // @wire(getPendingComments)
-    // wiredComments(result) {
-    //     this.wiredCommentsResult = result;
-    //     if (result.data) {
-    //         this.pendingComments = result.data;
-    //         this.dashboardStats.pendingComments = result.data.length;
-    //         this.generateRecentActivity();
-    //     } else if (result.error) {
-    //         console.error('Error loading comments:', result.error);
-    //     }
+    @wire(getPendingComments)
+    wiredComments(result) {
+        this.wiredCommentsResult = result;
+        if (result.data) {
+            this.pendingComments = result.data;
+            this.dashboardStats.pendingComments = result.data.length;
+            this.generateRecentActivity();
+        } else if (result.error) {
+            console.error('Error loading comments:', result.error);
+        }
         
-    //     // Set loading to false after all data is loaded
-    //     this.isLoading = false;
-    // }
+        // Set loading to false after all data is loaded
+        this.isLoading = false;
+    }
 
     // Computed properties
     get hasRecentPosts() {

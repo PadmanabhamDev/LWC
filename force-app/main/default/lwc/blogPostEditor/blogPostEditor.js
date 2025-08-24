@@ -2,11 +2,10 @@ import { LightningElement, api, track, wire } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { CurrentPageReference } from 'lightning/navigation';
-// import saveBlogPost from '@salesforce/apex/BlogPostController.saveBlogPost';
-// import deleteBlogPost from '@salesforce/apex/BlogPostController.deleteBlogPost';
-// import getBlogPostBySlug from '@salesforce/apex/BlogPostController.getBlogPostBySlug';
-//import getCategories from '@salesforce/apex/BlogPostController.getCategories';
-//import getUserName from '@salesforce/user/Name';
+import saveBlogPost from '@salesforce/apex/BlogPostController.saveBlogPost';
+import deleteBlogPost from '@salesforce/apex/BlogPostController.deleteBlogPost';
+import getBlogPostBySlug from '@salesforce/apex/BlogPostController.getBlogPostBySlug';
+import getCategories from '@salesforce/apex/BlogPostController.getCategories';
 import USER_ID from '@salesforce/user/Id';
 
 export default class BlogPostEditor extends NavigationMixin(LightningElement) {
@@ -33,7 +32,7 @@ export default class BlogPostEditor extends NavigationMixin(LightningElement) {
     @track isEditMode = false;
 
     slug;
-    authorName = getUserName;
+    @track authorName = '';
 
     // Status options for the combobox
     statusOptions = [
@@ -60,17 +59,17 @@ export default class BlogPostEditor extends NavigationMixin(LightningElement) {
     }
 
     // Wire categories
-    // @wire(getCategories)
-    // wiredCategories({ error, data }) {
-    //     if (data) {
-    //         this.categories = data.map(category => ({
-    //             label: category.Name,
-    //             value: category.Id
-    //         }));
-    //     } else if (error) {
-    //         console.error('Error loading categories:', error);
-    //     }
-    // }
+    @wire(getCategories)
+    wiredCategories({ error, data }) {
+        if (data) {
+            this.categories = data.map(category => ({
+                label: category.Name,
+                value: category.Id
+            }));
+        } else if (error) {
+            console.error('Error loading categories:', error);
+        }
+    }
 
     // Lifecycle hooks
     connectedCallback() {

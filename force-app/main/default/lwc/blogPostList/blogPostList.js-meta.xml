@@ -5,12 +5,11 @@
     <targets>
         <target>lightning__AppPage</target>
         <target>lightning__HomePage</target>
-        <target>lightningCommunity__Page</target>
         <target>lightningCommunity__Default</target>
         <target>lightning__Tab</target>
     </targets>
     <targetConfigs>
-        <targetConfig targets="lightning__AppPage,lightning__HomePage,lightningCommunity__Default">
+        <targetConfig targets="lightning__AppPage,lightning__HomePage">
             <property name="pageTitle" type="String" default="Latest Blog Posts" label="Page Title" description="The title displayed at the top of the blog list"/>
             <property name="pageDescription" type="String" default="Discover our latest articles and insights" label="Page Description" description="The description displayed below the title"/>
             <property name="showCreateButton" type="Boolean" default="false" label="Show Create Button" description="Show the Create New Post button for administrators"/>

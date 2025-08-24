@@ -5,12 +5,11 @@
     <targets>
         <target>lightning__AppPage</target>
         <target>lightning__RecordPage</target>
-        <target>lightningCommunity__Page</target>
         <target>lightningCommunity__Default</target>
         <target>lightning__Tab</target>
     </targets>
     <targetConfigs>
-        <targetConfig targets="lightning__AppPage,lightningCommunity__Default">
+        <targetConfig targets="lightning__AppPage">
             <property name="showAdminActions" type="Boolean" default="false" label="Show Admin Actions" description="Show moderation actions for administrators"/>
             <property name="showAdminStats" type="Boolean" default="false" label="Show Admin Statistics" description="Show comment statistics for administrators"/>
             <property name="commentsPerPage" type="Integer" default="10" label="Comments Per Page" description="Number of comments to display initially"/>

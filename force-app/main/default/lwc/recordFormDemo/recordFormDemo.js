@@ -5,6 +5,7 @@ import Name_field from '@salesforce/schema/Account.Name';
 import Rating_field from '@salesforce/schema/Account.Rating';
 import Phone_field from '@salesforce/schema/Account.Phone';
 import NumberOfEmployees_field from '@salesforce/schema/Account.NumberOfEmployees';
+import NumberOfEmployees_fieldld from '@salesforce/schema/Account.NumberOfEmployees';
 
 export default class RecordFormDemo extends LightningElement {
 

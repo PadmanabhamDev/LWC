@@ -243,6 +243,7 @@ public with sharing class BlogCommentController {
         @AuraEnabled public Integer approvedCount { get; set; }
         @AuraEnabled public Integer pendingCount { get; set; }
         @AuraEnabled public Integer rejectedCount { get; set; }
+        
         public CommentStats() {
             this.approvedCount = 0;
             this.pendingCount = 0;

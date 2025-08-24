@@ -1,8 +1,8 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import { refreshApex } from '@salesforce/apex';
-//import getBlogPosts from '@salesforce/apex/BlogPostController.getBlogPosts';
-//import getCategories from '@salesforce/apex/BlogPostController.getCategories';
+import getBlogPosts from '@salesforce/apex/BlogPostController.getBlogPosts';
+import getCategories from '@salesforce/apex/BlogPostController.getCategories';
 
 export default class BlogPostList extends NavigationMixin(LightningElement) {
     @api pageTitle = 'Latest Blog Posts';
@@ -19,17 +19,17 @@ export default class BlogPostList extends NavigationMixin(LightningElement) {
     @track error;
 
     // Wired methods
-    // @wire(getCategories)
-    // wiredCategories({ error, data }) {
-    //     if (data) {
-    //         this.categories = data.map(category => ({
-    //             ...category,
-    //             variant: this.selectedCategoryId === category.Id ? 'brand' : 'neutral'
-    //         }));
-    //     } else if (error) {
-    //         console.error('Error loading categories:', error);
-    //     }
-    // }
+    @wire(getCategories)
+    wiredCategories({ error, data }) {
+        if (data) {
+            this.categories = data.map(category => ({
+                ...category,
+                variant: this.selectedCategoryId === category.Id ? 'brand' : 'neutral'
+            }));
+        } else if (error) {
+            console.error('Error loading categories:', error);
+        }
+    }
 
     // Lifecycle hooks
     connectedCallback() {

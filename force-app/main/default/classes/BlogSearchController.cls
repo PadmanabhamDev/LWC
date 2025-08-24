@@ -22,7 +22,7 @@ public with sharing class BlogSearchController {
                               'Blog_Post__c(Id, Name, Excerpt__c, Featured_Image_URL__c, ' +
                               'Published_Date__c, Category__r.Name, Category__r.Color__c, ' +
                               'Author__r.Name, View_Count__c, URL_Slug__c ' +
-                              'WHERE Status__c = \'Published\' AND Published_Date__c <= NOW()';
+                              'WHERE Status__c = \'Published\' AND Published_Date__c <= ' + String.valueOf(System.now()) + ')';
             
             if (String.isNotBlank(categoryId)) {
                 soqlQuery += ' AND Category__c = :categoryId';
@@ -35,7 +35,7 @@ public with sharing class BlogSearchController {
             
             // Get total count for the same search
             String countQuery = 'FIND :searchTerm IN ALL FIELDS RETURNING ' +
-                               'Blog_Post__c(Id WHERE Status__c = \'Published\' AND Published_Date__c <= NOW()';
+                               'Blog_Post__c(Id WHERE Status__c = \'Published\' AND Published_Date__c <= ' + String.valueOf(System.now()) + ')';
             
             if (String.isNotBlank(categoryId)) {
                 countQuery += ' AND Category__c = :categoryId';
@@ -59,37 +59,38 @@ public with sharing class BlogSearchController {
      * @param pageNumber Current page number
      * @return Blog posts with the specified tag
      */
-    // @AuraEnabled(cacheable=true)
-    // public static SearchResponse getBlogPostsByTag(String tagName, Integer pageSize, Integer pageNumber) {
-    //     try {
-    //         Integer offset = (pageNumber - 1) * pageSize;
+    @AuraEnabled(cacheable=true)
+    public static SearchResponse getBlogPostsByTag(String tagName, Integer pageSize, Integer pageNumber) {
+        try {
+            Integer offset = (pageNumber - 1) * pageSize;
+            String tagPattern = '%' + tagName + '%';
             
-    //         List<Blog_Post__c> posts = [
-    //             SELECT Id, Name, Excerpt__c, Featured_Image_URL__c, Published_Date__c,
-    //                    Category__r.Name, Category__r.Color__c, Author__r.Name, 
-    //                    View_Count__c, URL_Slug__c
-    //             FROM Blog_Post__c 
-    //             WHERE Status__c = 'Published' 
-    //             AND Published_Date__c <= System.now()
-    //             AND Tags__c INCLUDES (:tagName)
-    //             ORDER BY Published_Date__c DESC
-    //             LIMIT :pageSize 
-    //             OFFSET :offset
-    //         ];
+            List<Blog_Post__c> posts = [
+                SELECT Id, Name, Excerpt__c, Featured_Image_URL__c, Published_Date__c,
+                       Category__r.Name, Category__r.Color__c, Author__r.Name, 
+                       View_Count__c, URL_Slug__c
+                FROM Blog_Post__c 
+                WHERE Status__c = 'Published' 
+                AND Published_Date__c <= :System.now()
+                AND Tags__c LIKE :tagPattern
+                ORDER BY Published_Date__c DESC
+                LIMIT :pageSize 
+                OFFSET :offset
+            ];
             
-    //         Integer totalCount = [
-    //             SELECT COUNT() 
-    //             FROM Blog_Post__c 
-    //             WHERE Status__c = 'Published' 
-    //             AND Published_Date__c <= System.now()
-    //             AND Tags__c INCLUDES (:tagName)
-    //         ];
+            Integer totalCount = [
+                SELECT COUNT() 
+                FROM Blog_Post__c 
+                WHERE Status__c = 'Published' 
+                AND Published_Date__c <= :System.now()
+                AND Tags__c LIKE :tagPattern
+            ];
             
-    //         return new SearchResponse(posts, totalCount, 'Tag: ' + tagName);
-    //     } catch (Exception e) {
-    //         throw new AuraHandledException('Error retrieving posts by tag: ' + e.getMessage());
-    //     }
-    // }
+            return new SearchResponse(posts, totalCount, 'Tag: ' + tagName);
+        } catch (Exception e) {
+            throw new AuraHandledException('Error retrieving posts by tag: ' + e.getMessage());
+        }
+    }
     
     /**
      * @description Get search suggestions based on partial input

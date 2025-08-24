@@ -25,11 +25,8 @@ export default class RecordEditCustom extends LightningElement {
         let isValid = true;
         inputValidity.forEach(field => {
             if (!field.checkValidity()) {
-                field.setCustomValidity("Cannot be Empty Value");
+                field.reportValidity();
                 isValid = false;
-            } else {
-                field.setCustomValidity("");
-                isValid = true;
             }
         })
 

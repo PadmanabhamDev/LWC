@@ -1,11 +1,11 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import { CurrentPageReference } from 'lightning/navigation';
-i//mport getBlogPostBySlug from '@salesforce/apex/BlogPostController.getBlogPostBySlug';
+import getBlogPostBySlug from '@salesforce/apex/BlogPostController.getBlogPostBySlug';
 
 export default class BlogPostDetail extends NavigationMixin(LightningElement) {
     @api recordId;
-   // @api showRelatedPosts = true;
+    @api showRelatedPosts = false;
 
     @track blogPost;
     @track isLoading = true;

@@ -5,16 +5,15 @@
     <targets>
         <target>lightning__AppPage</target>
         <target>lightning__RecordPage</target>
-        <target>lightningCommunity__Page</target>
         <target>lightningCommunity__Default</target>
         <target>lightning__Tab</target>
     </targets>
-    <!-- <targetConfigs>
-        <targetConfig targets="lightning__AppPage,lightningCommunity__Default">
-            <property name="showRelatedPosts" type="Boolean" default="true" label="Show Related Posts" description="Display related posts section at the bottom"/>
+    <targetConfigs>
+        <targetConfig targets="lightning__AppPage">
+            <property name="showRelatedPosts" type="Boolean" default="false" label="Show Related Posts" description="Display related posts section at the bottom"/>
         </targetConfig>
         <targetConfig targets="lightning__RecordPage">
             <property name="showRelatedPosts" type="Boolean" default="false" label="Show Related Posts" description="Display related posts section at the bottom"/>
         </targetConfig>
-    </targetConfigs> -->
+    </targetConfigs>
 </LightningComponentBundle>
